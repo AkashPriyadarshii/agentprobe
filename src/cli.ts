@@ -12,7 +12,7 @@ const program = new Command();
 program
   .name('agentprobe')
   .description('The open-source Lighthouse for AI Agents. Audit agentic web readiness, llms.txt, crawler access, and DOM actionability.')
-  .version('0.0.1', '-v, --version', 'Output current agentprobe version')
+  .version('0.0.2', '-v, --version', 'Output current agentprobe version')
   .argument('[target]', 'Target URL (https://example.com) or static build directory (./dist)')
   .option('--json', 'Output machine-readable JSON to stdout')
   .option('--summary', 'Output GitHub Step Summary Markdown')

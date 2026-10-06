@@ -7,6 +7,7 @@ export function calculateReport(
     llmstxt: PillarResult;
     semantic: PillarResult;
     actionability: PillarResult;
+    protocols: PillarResult;
   },
   minScoreThreshold = 80
 ): AuditReport {
@@ -14,7 +15,8 @@ export function calculateReport(
     pillars.crawler.score +
     pillars.llmstxt.score +
     pillars.semantic.score +
-    pillars.actionability.score
+    pillars.actionability.score +
+    pillars.protocols.score
   );
 
   const allChecks = [
@@ -22,6 +24,7 @@ export function calculateReport(
     ...pillars.llmstxt.checks,
     ...pillars.semantic.checks,
     ...pillars.actionability.checks,
+    ...pillars.protocols.checks,
   ];
 
   const passedChecks = allChecks.filter((c) => c.status === 'pass').length;

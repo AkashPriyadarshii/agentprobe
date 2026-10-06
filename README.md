@@ -27,7 +27,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
     <a href="#direct-answer">Direct answer</a> &bull;
     <a href="#why-agentprobe">Why</a> &bull;
     <a href="#quickstart">Quickstart</a> &bull;
-    <a href="#the-4-audit-pillars">The 4 Pillars</a> &bull;
+    <a href="#the-5-audit-pillars">The 5 Pillars</a> &bull;
     <a href="#cli-reference">CLI Reference</a> &bull;
     <a href="#cicd-github-action">CI/CD Gate</a> &bull;
     <a href="#dynamic-badge">Badge</a> &bull;
@@ -54,17 +54,17 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 $ npx @akashpriyadarshii/agentprobe https://akashpriyadarshi.is-a.dev
 
   ┌──────────────────────────────────────────────────────────────┐
-  │                    agentprobe v0.0.1                         │
+  │                    agentprobe v0.0.2                         │
   │           The Open-Source Lighthouse for AI Agents           │
   └──────────────────────────────────────────────────────────────┘
 
   Target:      https://akashpriyadarshi.is-a.dev/
-  Audited:     2026-10-06T11:35:58.061Z
+  Audited:     2026-10-06T20:10:30.096Z
   Gate Status: PASSED (min score: 80)
 
   ════════════════════════════════════════════════════════════
-  TOTAL READINESS SCORE: 98 / 100
-  [█████████████████████████████░] 98%
+  TOTAL READINESS SCORE: 85 / 100
+  [██████████████████████████░░░░] 85%
   ════════════════════════════════════════════════════════════
 ```
 
@@ -106,7 +106,7 @@ agentprobe ./dist --min-score 85
 ```bash
 agentprobe init
 ```
-Generates a spec-compliant `llms.txt` and an AI-crawler-friendly `robots.txt` directly in your `public/` or root directory.
+Generates spec-compliant `llms.txt`, a 15-bot permissive `robots.txt`, and discovery manifests (`.well-known/ai-catalog.json`, `.well-known/mcp.json`) directly in your `public/` or root directory.
 
 ### Shell Aliases
 
@@ -122,16 +122,17 @@ Set-Alias probe agentprobe
 
 ---
 
-## The 4 Audit Pillars
+## The 5 Audit Pillars
 
-`agentprobe` evaluates websites across four weighted pillars (25 points each, 100 points total):
+`agentprobe` evaluates websites across five weighted pillars (20 points each, 100 points total):
 
 | Pillar | Weight | What it inspects | Why it matters for AI Agents |
 |---|:---:|---|---|
-| **1. Bot Accessibility** | `25 pts` | `robots.txt` permissions, WAF blocks, XML sitemap | Guarantees major models (`GPTBot`, `ClaudeBot`, `PerplexityBot`) are permitted to crawl your content. |
-| **2. LLM Manifest (`llms.txt`)** | `25 pts` | `/llms.txt`, `/llms-full.txt`, H1/blockquote syntax, token budget | Gives agents a lightweight, structured markdown summary of your site, saving 90%+ token costs. |
-| **3. Structured Context** | `25 pts` | Schema.org JSON-LD, HTML5 landmarks (`<main>`, `<nav>`), headings | Eliminates hallucination by providing unambiguous, machine-readable entity metadata. |
-| **4. Actionability & Negotiation** | `25 pts` | `Accept: text/markdown` support, button `aria-label`s, SSR vs SPA shells | Ensures agents can execute form submissions and clicks without stumbling on unlabeled DOM nodes. |
+| **1. Bot Accessibility** | `20 pts` | `robots.txt` permissions (15 AI crawlers), WAF blocks, XML sitemap | Guarantees major models (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Amazonbot`, `ByteSpider`) can crawl. |
+| **2. LLM Manifest (`llms.txt`)** | `20 pts` | `/llms.txt`, `/llms-full.txt`, H1/blockquote syntax, token budget | Gives agents a lightweight, structured markdown summary of your site, saving 90%+ token costs. |
+| **3. Structured Context** | `20 pts` | Schema.org JSON-LD, HTML5 landmarks (`<main>`, `<nav>`), headings | Eliminates hallucination by providing unambiguous, machine-readable entity metadata. |
+| **4. Actionability & Negotiation** | `20 pts` | `Accept: text/markdown` support, button `aria-label`s, SSR vs SPA shells | Ensures agents can execute form submissions and clicks without stumbling on unlabeled DOM nodes. |
+| **5. Protocol Discovery & Commerce** | `20 pts` | `/.well-known/ai-catalog.json`, `/.well-known/mcp.json`, skills index, `x402` payment headers | Enables autonomous tool discovery (ARD, MCP) and agentic commerce / micropayment protocols. |
 
 ---
 
@@ -217,18 +218,19 @@ agentprobe/
 │   │   ├── runner.ts          # Parallel multi-target engine executor
 │   │   └── scorer.ts          # Deterministic deduction-based scoring
 │   ├── engines/
-│   │   ├── crawler.ts         # robots.txt & 10 AI bot permissions
+│   │   ├── crawler.ts         # robots.txt & 15 AI bot permissions
 │   │   ├── llmstxt.ts         # llms.txt & llms-full.txt parser + token budget
 │   │   ├── semantic.ts        # Schema.org JSON-LD & HTML5 landmark validator
-│   │   └── actionability.ts   # Markdown content negotiation & ARIA accessibility
+│   │   ├── actionability.ts   # Markdown content negotiation & ARIA accessibility
+│   │   └── protocols.ts       # Protocol discovery (ARD, MCP & x402 commerce)
 │   ├── reporters/
 │   │   ├── terminal.ts        # ANSI high-contrast terminal UI
 │   │   ├── json.ts            # Machine-readable JSON
 │   │   ├── summary.ts         # GitHub Actions $GITHUB_STEP_SUMMARY
 │   │   └── badge.ts           # Dynamic Shields.io badge generator
 │   └── scaffolder/
-│       └── init.ts            # llms.txt and robots.txt template scaffolder
-├── tests/                     # 14 passing Vitest unit tests
+│       └── init.ts            # llms.txt, robots.txt, and .well-known scaffolder
+├── tests/                     # 16 passing Vitest unit tests
 ├── action.yml                 # Composite GitHub Action manifest
 └── README.md
 ```

@@ -26,7 +26,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
   if (content === undefined) {
     try {
       const res = await fetch(llmsUrl, {
-        headers: { 'User-Agent': 'agentprobe/0.0.1' },
+        headers: { 'User-Agent': 'agentprobe/0.0.2' },
         signal: AbortSignal.timeout(5000),
       });
       status = res.status;
@@ -42,7 +42,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
     try {
       const resFull = await fetch(llmsFullUrl, {
         method: 'HEAD',
-        headers: { 'User-Agent': 'agentprobe/0.0.1' },
+        headers: { 'User-Agent': 'agentprobe/0.0.2' },
         signal: AbortSignal.timeout(4000),
       });
       fullStatus = resFull.status;
@@ -51,15 +51,15 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
     }
   }
 
-  // Check 1: llms.txt Availability
+  // Check 1: llms.txt Availability (7 pts)
   if (status === 200 && content && content.trim().length > 0) {
     checks.push({
       id: 'llms-exists',
       name: 'llms.txt Manifest Found',
       description: 'Site publishes a standardized /llms.txt file for AI agent context',
       status: 'pass',
-      score: 10,
-      maxScore: 10,
+      score: 7,
+      maxScore: 7,
       details: `Reachable at /llms.txt (${content.length} bytes)`,
     });
   } else {
@@ -69,13 +69,13 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       description: 'Site publishes a standardized /llms.txt file for AI agent context',
       status: 'fail',
       score: 0,
-      maxScore: 10,
+      maxScore: 7,
       details: status ? `Status code: ${status}` : 'Not found or unreachable',
-      recommendation: 'Run "npx agentprobe init" or create /llms.txt in your public root.',
+      recommendation: 'Run "npx @akashpriyadarshii/agentprobe init" or create /llms.txt in your public root.',
     });
   }
 
-  // Check 2: Spec structure compliance
+  // Check 2: Spec structure compliance (6 pts)
   if (content && content.trim().length > 0) {
     const hasH1 = /^#\s+.+/m.test(content);
     const hasBlockquote = /^>\s+.+/m.test(content);
@@ -84,23 +84,23 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
     let formatScore = 0;
     const formatIssues: string[] = [];
 
-    if (hasH1) formatScore += 3;
+    if (hasH1) formatScore += 2;
     else formatIssues.push('Missing H1 title ("# Project Name")');
 
     if (hasBlockquote) formatScore += 2;
     else formatIssues.push('Missing blockquote summary ("> Short description")');
 
-    if (hasLinks) formatScore += 3;
+    if (hasLinks) formatScore += 2;
     else formatIssues.push('Missing structured markdown link list ("- [Title](url): desc")');
 
-    if (formatScore === 8) {
+    if (formatScore === 6) {
       checks.push({
         id: 'llms-spec-structure',
         name: 'llms.txt Spec Compliance',
         description: 'Follows standard llms.txt formatting with H1, blockquote, and curated links',
         status: 'pass',
-        score: 8,
-        maxScore: 8,
+        score: 6,
+        maxScore: 6,
         details: 'Valid H1 title, summary blockquote, and structured link index.',
       });
     } else {
@@ -110,13 +110,13 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
         description: 'Follows standard llms.txt formatting with H1, blockquote, and curated links',
         status: 'warn',
         score: formatScore,
-        maxScore: 8,
+        maxScore: 6,
         details: `Format issues: ${formatIssues.join(', ')}`,
         recommendation: 'Format /llms.txt with: # Title, > One-sentence summary, and ## Sections with markdown link items.',
       });
     }
 
-    // Check 3: Token budget efficiency
+    // Check 3: Token budget efficiency (3 pts)
     const estimatedTokens = estimateTokenCount(content);
     if (estimatedTokens <= 15000) {
       checks.push({
@@ -147,7 +147,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       description: 'Follows standard llms.txt formatting with H1, blockquote, and curated links',
       status: 'fail',
       score: 0,
-      maxScore: 8,
+      maxScore: 6,
       details: 'No /llms.txt file to parse.',
       recommendation: 'Create a compliant /llms.txt file.',
     });
@@ -162,7 +162,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
     });
   }
 
-  // Check 4: Full Documentation Manifest (/llms-full.txt)
+  // Check 4: Full Documentation Manifest (/llms-full.txt) (4 pts)
   if (fullStatus === 200) {
     checks.push({
       id: 'llms-full-exists',
@@ -181,7 +181,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       status: 'warn',
       score: 1,
       maxScore: 4,
-      details: 'No /llms-full.txt detected (optional but recommended for deep technical docs)',
+      details: 'No /llms-full.txt detected (optional companion for deep technical docs)',
       recommendation: 'Optionally bundle your full markdown documentation at /llms-full.txt.',
     });
   }

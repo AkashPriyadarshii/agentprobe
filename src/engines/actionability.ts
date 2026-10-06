@@ -12,7 +12,7 @@ export async function testMarkdownNegotiation(url: string): Promise<boolean> {
     const res = await fetch(url, {
       headers: {
         'Accept': 'text/markdown, text/plain;q=0.9, */*;q=0.8',
-        'User-Agent': 'agentprobe/0.0.1 (Agentic Web Readiness Audit)',
+        'User-Agent': 'agentprobe/0.0.2 (Agentic Web Readiness Audit)',
       },
       signal: AbortSignal.timeout(4000),
     });
@@ -29,7 +29,7 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
   const checks: AuditCheck[] = [];
   const $ = cheerio.load(input.html);
 
-  // Check 1: Markdown Content Negotiation
+  // Check 1: Markdown Content Negotiation (7 pts)
   if (input.markdownNegotiationSupported) {
     checks.push({
       id: 'action-markdown-negotiation',
@@ -53,7 +53,7 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
     });
   }
 
-  // Check 2: Interactive Buttons Accessibility
+  // Check 2: Interactive Buttons Accessibility (5 pts)
   const buttons = $('button, input[type="button"], input[type="submit"], [role="button"]');
   let unlabeledButtons = 0;
 
@@ -76,8 +76,8 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Interactive Button Actionability',
       description: 'All buttons have accessible names for autonomous clicking and navigation',
       status: 'pass',
-      score: 7,
-      maxScore: 7,
+      score: 5,
+      maxScore: 5,
       details: 'No interactive buttons detected on page.',
     });
   } else if (unlabeledButtons === 0) {
@@ -86,8 +86,8 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Interactive Button Actionability',
       description: 'All buttons have accessible names for autonomous clicking and navigation',
       status: 'pass',
-      score: 7,
-      maxScore: 7,
+      score: 5,
+      maxScore: 5,
       details: `All ${buttons.length} button(s) have accessible text or aria-labels.`,
     });
   } else {
@@ -96,14 +96,14 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Interactive Button Actionability',
       description: 'All buttons have accessible names for autonomous clicking and navigation',
       status: 'warn',
-      score: Math.max(0, 7 - unlabeledButtons * 2),
-      maxScore: 7,
+      score: Math.max(0, 5 - unlabeledButtons * 2),
+      maxScore: 5,
       details: `Found ${unlabeledButtons} unlabeled button(s) without text or aria-label.`,
       recommendation: 'Add descriptive aria-label or visible text to icon buttons so browsing agents know what they do.',
     });
   }
 
-  // Check 3: Form Input Actionability
+  // Check 3: Form Input Actionability (4 pts)
   const inputs = $('input:not([type="hidden"]):not([type="button"]):not([type="submit"]), textarea, select');
   let unlabeledInputs = 0;
 
@@ -126,8 +126,8 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Form Inputs & Form Controls',
       description: 'Input fields have labels or placeholders for autonomous agent form filling',
       status: 'pass',
-      score: 6,
-      maxScore: 6,
+      score: 4,
+      maxScore: 4,
       details: 'No input fields detected on page.',
     });
   } else if (unlabeledInputs === 0) {
@@ -136,8 +136,8 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Form Inputs & Form Controls',
       description: 'Input fields have labels or placeholders for autonomous agent form filling',
       status: 'pass',
-      score: 6,
-      maxScore: 6,
+      score: 4,
+      maxScore: 4,
       details: `All ${inputs.length} input field(s) have clear labels/placeholders.`,
     });
   } else {
@@ -146,14 +146,14 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Form Inputs & Form Controls',
       description: 'Input fields have labels or placeholders for autonomous agent form filling',
       status: 'warn',
-      score: Math.max(0, 6 - unlabeledInputs * 2),
-      maxScore: 6,
+      score: Math.max(0, 4 - unlabeledInputs * 2),
+      maxScore: 4,
       details: `Found ${unlabeledInputs} input field(s) without labels or aria-labels.`,
       recommendation: 'Ensure every form input has an associated <label> or aria-label attribute.',
     });
   }
 
-  // Check 4: Pre-rendered Body Content vs Empty SPA Trap
+  // Check 4: Pre-rendered Body Content vs Empty SPA Trap (4 pts)
   const bodyText = $('body').text().replace(/\s+/g, ' ').trim();
   const scriptCount = $('script').length;
 
@@ -163,8 +163,8 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       name: 'Static / SSR Content Availability',
       description: 'Content is available without requiring client-side JS hydration execution',
       status: 'pass',
-      score: 5,
-      maxScore: 5,
+      score: 4,
+      maxScore: 4,
       details: `Pre-rendered content detected (~${bodyText.length} characters of initial body text).`,
     });
   } else {
@@ -174,9 +174,9 @@ export function auditActionability(input: ActionabilityAuditInput): PillarResult
       description: 'Content is available without requiring client-side JS hydration execution',
       status: 'fail',
       score: 1,
-      maxScore: 5,
+      maxScore: 4,
       details: `Initial HTML contains very little readable text (${bodyText.length} chars) with ${scriptCount} scripts.`,
-      recommendation: 'Enable Server-Side Rendering (SSR) or Static Site Generation (SSG). AI crawlers often don\'t execute client-side JS.',
+      recommendation: 'Enable Server-Side Rendering (SSR) or Static Site Generation (SSG). AI crawlers often do not execute client-side JS.',
     });
   }
 

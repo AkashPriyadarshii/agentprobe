@@ -29,6 +29,7 @@ export interface AuditReport {
     llmstxt: PillarResult;
     semantic: PillarResult;
     actionability: PillarResult;
+    protocols: PillarResult;
   };
   summary: {
     passedChecks: number;

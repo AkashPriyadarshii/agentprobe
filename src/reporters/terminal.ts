@@ -35,7 +35,7 @@ export function formatTerminalReport(report: AuditReport): string {
 
   lines.push('');
   lines.push(pc.bold(pc.cyan('  ┌──────────────────────────────────────────────────────────────┐')));
-  lines.push(pc.bold(pc.cyan('  │                    agentprobe v0.0.1                         │')));
+  lines.push(pc.bold(pc.cyan('  │                    agentprobe v0.0.2                         │')));
   lines.push(pc.bold(pc.cyan('  │           The Open-Source Lighthouse for AI Agents           │')));
   lines.push(pc.bold(pc.cyan('  └──────────────────────────────────────────────────────────────┘')));
   lines.push('');
@@ -53,12 +53,13 @@ export function formatTerminalReport(report: AuditReport): string {
   lines.push(pc.bold(scoreColor('  ' + '═'.repeat(60))));
   lines.push('');
 
-  // Pillar details
+  // 5 Pillar details
   const pillarList = [
     { key: 'crawler', title: '1. Bot Accessibility (robots.txt & WAF)', data: report.pillars.crawler },
     { key: 'llmstxt', title: '2. LLM Context Manifest (/llms.txt)', data: report.pillars.llmstxt },
     { key: 'semantic', title: '3. Structured Context (Schema.org & Landmarks)', data: report.pillars.semantic },
     { key: 'actionability', title: '4. Actionability & Content Negotiation', data: report.pillars.actionability },
+    { key: 'protocols', title: '5. Protocol Discovery & Commerce (ARD, MCP & x402)', data: report.pillars.protocols },
   ];
 
   for (const pillar of pillarList) {
@@ -79,7 +80,7 @@ export function formatTerminalReport(report: AuditReport): string {
   // Quick Fixes
   if (report.quickFixes.length > 0) {
     lines.push(pc.bold(pc.yellow('  ┌─ Actionable Fixes ───────────────────────────────────────────┐')));
-    for (const fix of report.quickFixes.slice(0, 5)) {
+    for (const fix of report.quickFixes.slice(0, 6)) {
       lines.push(`  │  ${pc.yellow('•')} ${fix}`);
     }
     lines.push(pc.bold(pc.yellow('  └──────────────────────────────────────────────────────────────┘')));

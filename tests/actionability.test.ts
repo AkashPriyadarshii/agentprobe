@@ -21,7 +21,7 @@ describe('ActionabilityEngine', () => {
       markdownNegotiationSupported: true,
     });
 
-    expect(result.score).toBe(25);
+    expect(result.score).toBe(20);
     expect(result.checks.find((c) => c.id === 'action-markdown-negotiation')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'action-button-labels')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'action-input-labels')?.status).toBe('pass');

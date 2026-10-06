@@ -20,14 +20,15 @@ describe('Scorer', () => {
     ],
   });
 
-  it('calculates total score and passes when score >= threshold', () => {
+  it('calculates total score across 5 pillars and passes when score >= threshold', () => {
     const report = calculateReport(
       'https://example.com',
       {
-        crawler: dummyPillar(25, 25),
-        llmstxt: dummyPillar(25, 25),
-        semantic: dummyPillar(20, 25),
-        actionability: dummyPillar(20, 25),
+        crawler: dummyPillar(20, 20),
+        llmstxt: dummyPillar(20, 20),
+        semantic: dummyPillar(16, 20),
+        actionability: dummyPillar(16, 20),
+        protocols: dummyPillar(18, 20),
       },
       80
     );
@@ -35,18 +36,19 @@ describe('Scorer', () => {
     expect(report.totalScore).toBe(90);
     expect(report.passed).toBe(true);
     expect(report.summary.passedChecks).toBe(2);
-    expect(report.summary.failedChecks).toBe(2);
-    expect(report.quickFixes).toHaveLength(2);
+    expect(report.summary.failedChecks).toBe(3);
+    expect(report.quickFixes).toHaveLength(3);
   });
 
   it('fails when total score is below minScore threshold', () => {
     const report = calculateReport(
       'https://example.com',
       {
-        crawler: dummyPillar(10, 25),
-        llmstxt: dummyPillar(0, 25),
-        semantic: dummyPillar(10, 25),
-        actionability: dummyPillar(10, 25),
+        crawler: dummyPillar(10, 20),
+        llmstxt: dummyPillar(0, 20),
+        semantic: dummyPillar(10, 20),
+        actionability: dummyPillar(5, 20),
+        protocols: dummyPillar(5, 20),
       },
       80
     );

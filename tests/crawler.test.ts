@@ -15,7 +15,7 @@ Sitemap: https://example.com/sitemap.xml
       statusCode: 200,
     });
 
-    expect(result.score).toBe(25);
+    expect(result.score).toBe(20);
     expect(result.checks.find((c) => c.id === 'crawler-robots-exists')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'crawler-ai-allowed')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'crawler-sitemap')?.status).toBe('pass');

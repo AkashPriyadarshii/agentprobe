@@ -23,7 +23,7 @@ describe('LLMsTxtEngine', () => {
       fullStatusCode: 200,
     });
 
-    expect(result.score).toBe(25);
+    expect(result.score).toBe(20);
     expect(result.checks.find((c) => c.id === 'llms-exists')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'llms-spec-structure')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'llms-token-budget')?.status).toBe('pass');

@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import pc from 'picocolors';
 
 export interface InitOptions {
   name?: string;
@@ -41,14 +40,20 @@ For more details, see https://llmstxt.org.
     createdFiles.push(llmsPath);
   }
 
-  // 2. Scaffold / Update robots.txt
+  // 2. Scaffold / Update robots.txt with 15 major AI bots
   const robotsPath = path.join(publicDir, 'robots.txt');
   if (!fs.existsSync(robotsPath)) {
     const robotsContent = `# AI Agent Crawlers
 User-agent: GPTBot
 Allow: /
 
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
@@ -60,6 +65,24 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: ByteSpider
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
 # General Crawlers
 User-agent: *
 Allow: /
@@ -68,6 +91,56 @@ Sitemap: https://yourdomain.com/sitemap.xml
 `;
     fs.writeFileSync(robotsPath, robotsContent, 'utf-8');
     createdFiles.push(robotsPath);
+  }
+
+  // 3. Scaffold .well-known/ai-catalog.json (Agentic Resource Discovery)
+  const wellKnownDir = path.join(publicDir, '.well-known');
+  if (!fs.existsSync(wellKnownDir)) {
+    fs.mkdirSync(wellKnownDir, { recursive: true });
+  }
+
+  const catalogPath = path.join(wellKnownDir, 'ai-catalog.json');
+  if (!fs.existsSync(catalogPath)) {
+    const catalogContent = JSON.stringify(
+      {
+        $schema: 'https://ard.dev/schema/v1/ai-catalog.json',
+        name: projectName,
+        description,
+        version: '1.0.0',
+        protocols: ['mcp', 'openapi'],
+        resources: [
+          {
+            type: 'documentation',
+            url: '/llms.txt',
+            format: 'text/markdown',
+          },
+        ],
+      },
+      null,
+      2
+    ) + '\n';
+    fs.writeFileSync(catalogPath, catalogContent, 'utf-8');
+    createdFiles.push(catalogPath);
+  }
+
+  // 4. Scaffold .well-known/mcp.json (Model Context Protocol)
+  const mcpPath = path.join(wellKnownDir, 'mcp.json');
+  if (!fs.existsSync(mcpPath)) {
+    const mcpContent = JSON.stringify(
+      {
+        name: projectName,
+        version: '1.0.0',
+        description,
+        capabilities: {
+          tools: true,
+          resources: true,
+        },
+      },
+      null,
+      2
+    ) + '\n';
+    fs.writeFileSync(mcpPath, mcpContent, 'utf-8');
+    createdFiles.push(mcpPath);
   }
 
   return { createdFiles };

@@ -15,16 +15,18 @@ describe('Scaffolder (init)', () => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('scaffolds llms.txt and robots.txt in empty dir', () => {
+  it('scaffolds llms.txt, robots.txt, ai-catalog.json, and mcp.json in empty dir', () => {
     const { createdFiles } = scaffoldAgentManifests({
       dir: tmpDir,
       name: 'TestProject',
       description: 'Test description',
     });
 
-    expect(createdFiles.length).toBe(2);
+    expect(createdFiles.length).toBe(4);
     expect(fs.existsSync(path.join(tmpDir, 'llms.txt'))).toBe(true);
     expect(fs.existsSync(path.join(tmpDir, 'robots.txt'))).toBe(true);
+    expect(fs.existsSync(path.join(tmpDir, '.well-known', 'ai-catalog.json'))).toBe(true);
+    expect(fs.existsSync(path.join(tmpDir, '.well-known', 'mcp.json'))).toBe(true);
 
     const llms = fs.readFileSync(path.join(tmpDir, 'llms.txt'), 'utf-8');
     expect(llms).toContain('# TestProject');
@@ -33,6 +35,9 @@ describe('Scaffolder (init)', () => {
     const robots = fs.readFileSync(path.join(tmpDir, 'robots.txt'), 'utf-8');
     expect(robots).toContain('User-agent: GPTBot');
     expect(robots).toContain('Allow: /');
+
+    const catalog = JSON.parse(fs.readFileSync(path.join(tmpDir, '.well-known', 'ai-catalog.json'), 'utf-8'));
+    expect(catalog.name).toBe('TestProject');
   });
 
   it('scaffolds into public/ folder when public/ exists', () => {
@@ -44,7 +49,10 @@ describe('Scaffolder (init)', () => {
       name: 'ViteApp',
     });
 
+    expect(createdFiles.length).toBe(4);
     expect(fs.existsSync(path.join(publicDir, 'llms.txt'))).toBe(true);
     expect(fs.existsSync(path.join(publicDir, 'robots.txt'))).toBe(true);
+    expect(fs.existsSync(path.join(publicDir, '.well-known', 'ai-catalog.json'))).toBe(true);
+    expect(fs.existsSync(path.join(publicDir, '.well-known', 'mcp.json'))).toBe(true);
   });
 });

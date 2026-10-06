@@ -28,7 +28,7 @@ describe('SemanticEngine', () => {
 </html>
 `;
     const result = auditSemanticStructure({ html, url: 'https://example.com' });
-    expect(result.score).toBe(25);
+    expect(result.score).toBe(20);
     expect(result.checks.find((c) => c.id === 'semantic-landmarks')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'semantic-headings')?.status).toBe('pass');
     expect(result.checks.find((c) => c.id === 'semantic-jsonld')?.status).toBe('pass');
