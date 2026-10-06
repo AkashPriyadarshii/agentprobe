@@ -1,7 +1,7 @@
 {
   "name": "@akashpriyadarshii/agentprobe",
   "version": "0.0.2",
-  "description": "The open-source Lighthouse for AI Agents. Audits agentic web readiness, llms.txt, crawler access, and DOM actionability.",
+  "description": "The open-source Lighthouse for AI Agents. Audit llms.txt, robots.txt bot rules, Schema.org JSON-LD, and DOM actionability in seconds. 0-100 score, CI gate, zero deps.",
   "author": "Akash Priyadarshi <272530059+AkashPriyadarshii@users.noreply.github.com>",
   "license": "MIT",
   "repository": {
@@ -23,14 +23,21 @@
     "dist"
   ],
   "keywords": [
-    "ai-agent",
+    "ai-agents",
     "agentic-web",
-    "llms-txt",
     "lighthouse",
+    "llms-txt",
+    "robots-txt",
+    "audit",
+    "cli",
+    "devtools",
+    "github-actions",
+    "typescript",
     "seo",
     "geo",
-    "audit",
-    "cli"
+    "json-ld",
+    "mcp",
+    "accessibility"
   ],
   "scripts": {
     "build": "tsup",

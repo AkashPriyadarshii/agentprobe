@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="agentprobe logo: optical scanner beacon and radar probe">
+  <title>agentprobe</title>
   <!-- Chassis: dark high-contrast container with precision border -->
   <rect width="96" height="96" rx="20" fill="#0b0f19" stroke="#1e293b" stroke-width="1.5"/>
 
