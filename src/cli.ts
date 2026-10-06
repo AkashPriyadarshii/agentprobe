@@ -5,6 +5,7 @@ import { auditTarget } from './core/runner.js';
 import { formatTerminalReport } from './reporters/terminal.js';
 import { formatJsonReport } from './reporters/json.js';
 import { formatGitHubStepSummary } from './reporters/summary.js';
+import { formatPlainReport } from './reporters/plain.js';
 import { scaffoldAgentManifests } from './scaffolder/init.js';
 
 const program = new Command();
@@ -15,6 +16,7 @@ program
   .version('0.0.2', '-v, --version', 'Output current agentprobe version')
   .argument('[target]', 'Target URL (https://example.com) or static build directory (./dist)')
   .option('--json', 'Output machine-readable JSON to stdout')
+  .option('--plain', 'Output structured plain text for AI agents and scripts')
   .option('--summary', 'Output GitHub Step Summary Markdown')
   .option('--min-score <number>', 'Minimum required readiness score to pass CI gate', '80')
   .option('--no-color', 'Disable ANSI colors in terminal output')
@@ -28,18 +30,21 @@ program
     const minScore = Number.parseInt(options.minScore, 10) || 80;
 
     try {
-      if (!options.json && !options.quiet) {
+      if (!options.json && !options.plain && !options.quiet) {
         process.stderr.write(pc.dim(`\n  🔍 Probing agent readiness for ${target}...\n`));
       }
 
       const report = await auditTarget(target, {
         minScore,
         json: options.json,
+        plain: options.plain,
         quiet: options.quiet,
       });
 
       if (options.json) {
         process.stdout.write(formatJsonReport(report) + '\n');
+      } else if (options.plain) {
+        process.stdout.write(formatPlainReport(report) + '\n');
       } else if (options.summary) {
         process.stdout.write(formatGitHubStepSummary(report) + '\n');
       } else {

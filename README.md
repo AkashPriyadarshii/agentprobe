@@ -144,6 +144,7 @@ Set-Alias probe agentprobe
 |---|:---:|---|
 | `<TARGET>` | *Required* | URL (`https://...` or `http://localhost:3000`) or static directory (`./dist`). |
 | `--min-score <n>` | `80` | Minimum passing score threshold (0-100) for CI quality gates. |
+| `--plain` | `false` | Outputs structured plain text without ANSI codes for AI agents and scripts. |
 | `--json` | `false` | Outputs machine-readable JSON to `stdout` for programmatic analysis. |
 | `--summary` | `false` | Outputs GitHub Step Summary Markdown for pull request checks. |
 | `--no-color` | `false` | Disables ANSI colors in terminal output (respects `NO_COLOR=1`). |
@@ -224,13 +225,14 @@ agentprobe/
 │   │   ├── actionability.ts   # Markdown content negotiation & ARIA accessibility
 │   │   └── protocols.ts       # Protocol discovery (ARD, MCP & x402 commerce)
 │   ├── reporters/
-│   │   ├── terminal.ts        # ANSI high-contrast terminal UI
+│   │   ├── terminal.ts        # ANSI high-contrast terminal UI with grade badges
+│   │   ├── plain.ts           # Structured plain text for AI agents and scripts
 │   │   ├── json.ts            # Machine-readable JSON
 │   │   ├── summary.ts         # GitHub Actions $GITHUB_STEP_SUMMARY
 │   │   └── badge.ts           # Dynamic Shields.io badge generator
 │   └── scaffolder/
 │       └── init.ts            # llms.txt, robots.txt, and .well-known scaffolder
-├── tests/                     # 16 passing Vitest unit tests
+├── tests/                     # 17 passing Vitest unit tests
 ├── action.yml                 # Composite GitHub Action manifest
 └── README.md
 ```

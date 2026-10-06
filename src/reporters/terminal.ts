@@ -1,5 +1,5 @@
 import pc from 'picocolors';
-import { AuditReport, RuleStatus } from '../types/index.js';
+import { AuditReport, Grade, RuleStatus } from '../types/index.js';
 import { generateBadge } from './badge.js';
 
 function getStatusBadge(status: RuleStatus): string {
@@ -13,13 +13,28 @@ function getStatusBadge(status: RuleStatus): string {
   }
 }
 
+function getGradeBadge(grade: Grade): string {
+  switch (grade) {
+    case 'A+':
+    case 'A':
+      return pc.bold(pc.bgGreen(pc.black(` ${grade} `)));
+    case 'B':
+      return pc.bold(pc.bgCyan(pc.black(` ${grade} `)));
+    case 'C':
+      return pc.bold(pc.bgYellow(pc.black(` ${grade} `)));
+    case 'D':
+    case 'F':
+      return pc.bold(pc.bgRed(pc.white(` ${grade} `)));
+  }
+}
+
 function getScoreColor(score: number): (text: string) => string {
   if (score >= 80) return pc.green;
   if (score >= 60) return pc.yellow;
   return pc.red;
 }
 
-function renderProgressBar(score: number, max: number, width = 20): string {
+function renderProgressBar(score: number, max: number, width = 24): string {
   const percentage = Math.max(0, Math.min(1, score / max));
   const filledChars = Math.round(percentage * width);
   const emptyChars = width - filledChars;
@@ -32,28 +47,29 @@ function renderProgressBar(score: number, max: number, width = 20): string {
 export function formatTerminalReport(report: AuditReport): string {
   const lines: string[] = [];
   const scoreColor = getScoreColor(report.totalScore);
+  const gradeBadge = getGradeBadge(report.grade);
+  const seconds = (report.durationMs / 1000).toFixed(2);
 
   lines.push('');
-  lines.push(pc.bold(pc.cyan('  ┌──────────────────────────────────────────────────────────────┐')));
-  lines.push(pc.bold(pc.cyan('  │                    agentprobe v0.0.2                         │')));
-  lines.push(pc.bold(pc.cyan('  │           The Open-Source Lighthouse for AI Agents           │')));
-  lines.push(pc.bold(pc.cyan('  └──────────────────────────────────────────────────────────────┘')));
+  lines.push(pc.cyan('  ╭──────────────────────────────────────────────────────────────╮'));
+  lines.push(pc.cyan(`  │  ${pc.bold(pc.white('agentprobe v' + report.version))}  ${pc.dim('•')}  ${pc.white('The Open-Source Lighthouse for AI Agents')}  │`));
+  lines.push(pc.cyan('  ╰──────────────────────────────────────────────────────────────╯'));
   lines.push('');
 
-  lines.push(`  ${pc.bold('Target:')}      ${pc.underline(report.target)}`);
-  lines.push(`  ${pc.bold('Audited:')}     ${report.timestamp}`);
-  lines.push(`  ${pc.bold('Gate Status:')} ${report.passed ? pc.bold(pc.green('PASSED')) : pc.bold(pc.red('FAILED'))} (min score: ${report.minScoreThreshold})`);
+  lines.push(`  ${pc.bold('Target:')}      ${pc.underline(pc.cyan(report.target))}`);
+  lines.push(`  ${pc.bold('Audited:')}     ${pc.dim(report.timestamp)} ${pc.dim(`(${seconds}s)`)}`);
+  lines.push(`  ${pc.bold('Gate Status:')} ${report.passed ? pc.bold(pc.green('PASSED')) : pc.bold(pc.red('FAILED'))} ${gradeBadge}  ${pc.dim(`(min score: ${report.minScoreThreshold})`)}`);
   lines.push('');
 
   // Overall Score Banner
   const scoreHeader = `  TOTAL READINESS SCORE: ${report.totalScore} / 100`;
   lines.push(pc.bold(scoreColor('  ' + '═'.repeat(60))));
-  lines.push(pc.bold(scoreColor(scoreHeader)));
-  lines.push('  ' + renderProgressBar(report.totalScore, 100, 30));
+  lines.push(pc.bold(scoreColor(scoreHeader)) + `  ${gradeBadge}`);
+  lines.push('  ' + renderProgressBar(report.totalScore, 100, 32));
   lines.push(pc.bold(scoreColor('  ' + '═'.repeat(60))));
   lines.push('');
 
-  // 5 Pillar details
+  // 5 Pillar Cards
   const pillarList = [
     { key: 'crawler', title: '1. Bot Accessibility (robots.txt & WAF)', data: report.pillars.crawler },
     { key: 'llmstxt', title: '2. LLM Context Manifest (/llms.txt)', data: report.pillars.llmstxt },
@@ -64,8 +80,8 @@ export function formatTerminalReport(report: AuditReport): string {
 
   for (const pillar of pillarList) {
     const pColor = getScoreColor(Math.round((pillar.data.score / pillar.data.maxScore) * 100));
-    lines.push(`  ${pc.bold(pillar.title)}`);
-    lines.push(`  Score: ${pColor(`${pillar.data.score}/${pillar.data.maxScore}`)}  ${renderProgressBar(pillar.data.score, pillar.data.maxScore, 15)}`);
+    lines.push(`  ${pc.bold(pc.white(pillar.title))}`);
+    lines.push(`  Score: ${pColor(`${pillar.data.score}/${pillar.data.maxScore}`)}  ${renderProgressBar(pillar.data.score, pillar.data.maxScore, 14)}`);
 
     for (const check of pillar.data.checks) {
       const badge = getStatusBadge(check.status);
@@ -73,17 +89,23 @@ export function formatTerminalReport(report: AuditReport): string {
       if (check.details) {
         lines.push(`           ${pc.dim(check.details)}`);
       }
+      if (check.recommendation && check.status !== 'pass') {
+        lines.push(`           ${pc.yellow('↳ Fix:')} ${pc.dim(check.recommendation)}`);
+      }
     }
     lines.push('');
   }
 
-  // Quick Fixes
+  // Actionable Fixes Box
   if (report.quickFixes.length > 0) {
-    lines.push(pc.bold(pc.yellow('  ┌─ Actionable Fixes ───────────────────────────────────────────┐')));
-    for (const fix of report.quickFixes.slice(0, 6)) {
-      lines.push(`  │  ${pc.yellow('•')} ${fix}`);
+    lines.push(pc.yellow('  ╭─ Actionable Fixes ───────────────────────────────────────────╮'));
+    for (let i = 0; i < Math.min(report.quickFixes.length, 5); i++) {
+      lines.push(`  │  ${pc.yellow('•')} ${report.quickFixes[i]}`);
     }
-    lines.push(pc.bold(pc.yellow('  └──────────────────────────────────────────────────────────────┘')));
+    lines.push('  │');
+    lines.push(`  │  ${pc.bold(pc.cyan('💡 Quick scaffold for missing manifests:'))}`);
+    lines.push(`  │     ${pc.bold(pc.white('npx @akashpriyadarshii/agentprobe init'))}`);
+    lines.push(pc.yellow('  ╰──────────────────────────────────────────────────────────────╯'));
     lines.push('');
   }
 

@@ -19,6 +19,7 @@ export async function auditTarget(target: string, options: AuditOptions = {}): P
 }
 
 async function auditRemoteUrl(targetUrl: string, options: AuditOptions): Promise<AuditReport> {
+  const startTime = Date.now();
   const normalizedUrl = targetUrl.endsWith('/') ? targetUrl : `${targetUrl}/`;
 
   // 1. Fetch main page HTML
@@ -62,6 +63,8 @@ async function auditRemoteUrl(targetUrl: string, options: AuditOptions): Promise
     markdownNegotiationSupported: markdownSupported,
   });
 
+  const durationMs = Date.now() - startTime;
+
   return calculateReport(
     normalizedUrl,
     {
@@ -71,11 +74,13 @@ async function auditRemoteUrl(targetUrl: string, options: AuditOptions): Promise
       actionability: actionabilityResult,
       protocols: protocolsResult,
     },
-    options.minScore ?? 80
+    options.minScore ?? 80,
+    durationMs
   );
 }
 
 async function auditLocalDirectory(dirPath: string, options: AuditOptions): Promise<AuditReport> {
+  const startTime = Date.now();
   const resolvedPath = path.resolve(dirPath);
   if (!fs.existsSync(resolvedPath)) {
     throw new Error(`Directory does not exist: ${resolvedPath}`);
@@ -160,6 +165,8 @@ async function auditLocalDirectory(dirPath: string, options: AuditOptions): Prom
     agentSkillsStatus: agentSkillsContent !== undefined ? 200 : 404,
   });
 
+  const durationMs = Date.now() - startTime;
+
   return calculateReport(
     resolvedPath,
     {
@@ -169,6 +176,7 @@ async function auditLocalDirectory(dirPath: string, options: AuditOptions): Prom
       actionability: actionabilityResult,
       protocols: protocolsResult,
     },
-    options.minScore ?? 80
+    options.minScore ?? 80,
+    durationMs
   );
 }

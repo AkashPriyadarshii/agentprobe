@@ -34,6 +34,7 @@ describe('Scorer', () => {
     );
 
     expect(report.totalScore).toBe(90);
+    expect(report.grade).toBe('A');
     expect(report.passed).toBe(true);
     expect(report.summary.passedChecks).toBe(2);
     expect(report.summary.failedChecks).toBe(3);
@@ -54,6 +55,31 @@ describe('Scorer', () => {
     );
 
     expect(report.totalScore).toBe(30);
+    expect(report.grade).toBe('F');
     expect(report.passed).toBe(false);
+  });
+
+  it('correctly assigns grades across grade bands', () => {
+    const makeScoreReport = (scorePerPillar: number) =>
+      calculateReport(
+        'https://example.com',
+        {
+          crawler: dummyPillar(scorePerPillar, 20),
+          llmstxt: dummyPillar(scorePerPillar, 20),
+          semantic: dummyPillar(scorePerPillar, 20),
+          actionability: dummyPillar(scorePerPillar, 20),
+          protocols: dummyPillar(scorePerPillar, 20),
+        },
+        80,
+        150
+      );
+
+    expect(makeScoreReport(20).grade).toBe('A+');
+    expect(makeScoreReport(20).durationMs).toBe(150);
+    expect(makeScoreReport(17).grade).toBe('A');
+    expect(makeScoreReport(15).grade).toBe('B');
+    expect(makeScoreReport(13).grade).toBe('C');
+    expect(makeScoreReport(9).grade).toBe('D');
+    expect(makeScoreReport(5).grade).toBe('F');
   });
 });

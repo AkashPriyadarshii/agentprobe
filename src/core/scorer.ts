@@ -1,4 +1,13 @@
-import { AuditReport, PillarResult } from '../types/index.js';
+import { AuditReport, Grade, PillarResult } from '../types/index.js';
+
+export function calculateGrade(score: number): Grade {
+  if (score >= 95) return 'A+';
+  if (score >= 85) return 'A';
+  if (score >= 75) return 'B';
+  if (score >= 60) return 'C';
+  if (score >= 40) return 'D';
+  return 'F';
+}
 
 export function calculateReport(
   target: string,
@@ -9,7 +18,8 @@ export function calculateReport(
     actionability: PillarResult;
     protocols: PillarResult;
   },
-  minScoreThreshold = 80
+  minScoreThreshold = 80,
+  durationMs = 0
 ): AuditReport {
   const totalScore = Math.round(
     pillars.crawler.score +
@@ -39,10 +49,14 @@ export function calculateReport(
   }
 
   const passed = totalScore >= minScoreThreshold;
+  const grade = calculateGrade(totalScore);
 
   return {
+    version: '0.0.2',
     target,
     timestamp: new Date().toISOString(),
+    durationMs,
+    grade,
     totalScore,
     passed,
     minScoreThreshold,

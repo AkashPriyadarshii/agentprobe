@@ -7,3 +7,7 @@ export { auditSemanticStructure } from './engines/semantic.js';
 export { auditActionability } from './engines/actionability.js';
 export { auditProtocolDiscovery } from './engines/protocols.js';
 export { scaffoldAgentManifests } from './scaffolder/init.js';
+export { formatTerminalReport } from './reporters/terminal.js';
+export { formatJsonReport } from './reporters/json.js';
+export { formatPlainReport } from './reporters/plain.js';
+export { formatGitHubStepSummary } from './reporters/summary.js';

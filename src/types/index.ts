@@ -1,4 +1,5 @@
 export type RuleStatus = 'pass' | 'fail' | 'warn';
+export type Grade = 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
 
 export interface AuditCheck {
   id: string;
@@ -19,8 +20,11 @@ export interface PillarResult {
 }
 
 export interface AuditReport {
+  version: string;
   target: string;
   timestamp: string;
+  durationMs: number;
+  grade: Grade;
   totalScore: number; // 0 to 100
   passed: boolean;
   minScoreThreshold: number;
@@ -43,6 +47,8 @@ export interface AuditReport {
 export interface AuditOptions {
   minScore?: number;
   json?: boolean;
+  plain?: boolean;
+  summary?: boolean;
   quiet?: boolean;
   noColor?: boolean;
   fix?: boolean;
