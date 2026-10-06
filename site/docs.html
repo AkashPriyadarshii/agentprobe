@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs - agentprobe</title>
+<meta name="description" content="Install agentprobe, run the 5-pillar audit, gate deploys in CI. Flags, exit codes, and the GitHub Action.">
+<link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
+<style>
+:root{--bg:#0b0f19;--panel:#111827;--border:#1e293b;--text:#e5e7eb;--dim:#94a3b8;--accent:#38bdf8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.6;padding:0 16px}
+main{max-width:760px;margin:0 auto;padding:48px 0 80px}
+a{color:var(--accent)}
+section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin:16px 0}
+h1{font-size:24px;margin-bottom:8px}
+h2{font-size:17px;margin-bottom:10px}
+p,li{font-size:14px}
+ul{margin:8px 0 0 18px}
+pre{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;overflow-x:auto;font-size:13px;margin-top:10px;white-space:pre-wrap}
+code{color:var(--accent)}
+table{width:100%;font-size:13px;border-collapse:collapse;margin-top:8px}
+td{padding:6px 4px;border-top:1px solid var(--border)}
+nav{margin-bottom:16px;font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="/">agentprobe</a> / docs</nav>
+<h1>Docs</h1>
+<section>
+<h2>Install and run</h2>
+<pre>npx @akashpriyadarshii/agentprobe https://your-site.com
+npm install -g @akashpriyadarshii/agentprobe
+agentprobe https://your-site.com</pre>
+</section>
+<section>
+<h2>Audit a local build</h2>
+<pre>agentprobe ./dist --min-score 85</pre>
+</section>
+<section>
+<h2>Scaffold missing manifests</h2>
+<pre>agentprobe init</pre>
+<p style="margin-top:8px">You get llms.txt, a 15-bot robots.txt, .well-known/ai-catalog.json, and .well-known/mcp.json in your public dir.</p>
+</section>
+<section>
+<h2>The 5 pillars</h2>
+<table>
+<tr><td>Bot Accessibility</td><td>20 pts - robots.txt across 15 AI crawlers, sitemap</td></tr>
+<tr><td>LLM Manifest</td><td>20 pts - /llms.txt, /llms-full.txt, token budget</td></tr>
+<tr><td>Structured Context</td><td>20 pts - JSON-LD, landmarks, headings</td></tr>
+<tr><td>Actionability</td><td>20 pts - markdown negotiation, aria labels, SSR content</td></tr>
+<tr><td>Protocol Discovery</td><td>20 pts - ai-catalog.json, mcp.json, skills, x402</td></tr>
+</table>
+</section>
+<section>
+<h2>Flags</h2>
+<table>
+<tr><td>--min-score &lt;n&gt;</td><td>Pass threshold 0-100, default 80</td></tr>
+<tr><td>--json</td><td>Machine JSON on stdout</td></tr>
+<tr><td>--plain</td><td>Plain text for agents and scripts</td></tr>
+<tr><td>--summary</td><td>GitHub Step Summary markdown</td></tr>
+<tr><td>--no-color</td><td>Disable ANSI colors</td></tr>
+<tr><td>-q, --quiet</td><td>Report only</td></tr>
+</table>
+</section>
+<section>
+<h2>Exit codes</h2>
+<ul>
+<li>0: score meets threshold</li>
+<li>1: score below threshold</li>
+<li>2: bad target, network failure, parse failure</li>
+</ul>
+</section>
+<section>
+<h2>CI gate</h2>
+<pre>uses: AkashPriyadarshii/agentprobe@v1
+with:
+  target: 'https://preview.your-site.com'
+  min-score: '85'</pre>
+<pre>npx @akashpriyadarshii/agentprobe ./dist --min-score 80 --json &gt; agent-report.json</pre>
+</section>
+</main>
+</body>
+</html>

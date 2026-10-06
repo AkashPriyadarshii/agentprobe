@@ -1,0 +1,8 @@
+{
+  "name": "agentprobe",
+  "version": "0.0.2",
+  "servers": [{ "url": "https://agentprobe.vercel.app/api/audit", "protocol": "https" }],
+  "tools": [
+    { "name": "audit", "description": "Audit a URL for AI agent readiness, returns 0-100 score" }
+  ]
+}

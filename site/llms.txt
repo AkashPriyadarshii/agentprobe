@@ -1,0 +1,24 @@
+# agentprobe
+
+> You run one command. You learn if AI agents can crawl, read, and act on your site.
+
+agentprobe audits agentic web readiness: llms.txt, robots.txt bot rules, Schema.org JSON-LD, and DOM actionability. You get a 0-100 score and a fix list.
+
+## Install
+
+- [Install and run](/docs.html): npx one-liner plus global install
+- [Live audit](/#url): paste a URL, the API runs the 5 engines
+
+## The 5 pillars
+
+- [Bot Accessibility](/docs.html): robots.txt across 15 AI crawlers, sitemap (20 pts)
+- [LLM Manifest](/docs.html): /llms.txt, /llms-full.txt, token budget (20 pts)
+- [Structured Context](/docs.html): JSON-LD, HTML5 landmarks, headings (20 pts)
+- [Actionability](/docs.html): markdown negotiation, aria labels, SSR content (20 pts)
+- [Protocol Discovery](/docs.html): ai-catalog.json, mcp.json, skills index, x402 (20 pts)
+
+## Docs
+
+- [Full docs](/docs.html): flags, exit codes, CI gate, GitHub Action
+- [Source](https://github.com/AkashPriyadarshii/agentprobe): CLI, engines, reporters
+- [npm](https://www.npmjs.com/package/@akashpriyadarshii/agentprobe): @akashpriyadarshii/agentprobe v0.0.2
