@@ -14,7 +14,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 
   <p>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0055ff.svg?style=flat-square" alt="MIT License" /></a>
-    <a href="https://www.npmjs.com/package/agentprobe"><img src="https://img.shields.io/npm/v/agentprobe?style=flat-square" alt="npm version" /></a>
+    <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe"><img src="https://img.shields.io/npm/v/@akashpriyadarshii/agentprobe?style=flat-square" alt="npm version" /></a>
     <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-2a3138.svg?style=flat-square" alt="Node >=18" /></a>
     <a href="https://github.com/AkashPriyadarshii/agentprobe/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/AkashPriyadarshii/agentprobe/ci.yml?branch=main&style=flat-square&label=ci" alt="CI Status" /></a>
   </p>
@@ -83,19 +83,26 @@ Websites designed only for human eyeballs break when autonomous agents attempt t
 
 ## Quickstart
 
-### 1. Audit a live website
+### Install & Run
+Run instantly via `npx`:
 ```bash
-npx agentprobe https://docs.yourdomain.com
+npx @akashpriyadarshii/agentprobe https://docs.yourdomain.com
 ```
 
-### 2. Audit a local production build before deploying
+Or install globally to use the `agentprobe` command anywhere:
 ```bash
-npx agentprobe ./dist --min-score 85
+npm install -g @akashpriyadarshii/agentprobe
+agentprobe https://docs.yourdomain.com
 ```
 
-### 3. Auto-scaffold missing AI manifests
+### 1. Audit a local production build before deploying
 ```bash
-npx agentprobe init
+agentprobe ./dist --min-score 85
+```
+
+### 2. Auto-scaffold missing AI manifests
+```bash
+agentprobe init
 ```
 Generates a spec-compliant `llms.txt` and an AI-crawler-friendly `robots.txt` directly in your `public/` or root directory.
 

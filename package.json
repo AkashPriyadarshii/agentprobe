@@ -1,15 +1,23 @@
 {
-  "name": "agentprobe",
+  "name": "@akashpriyadarshii/agentprobe",
   "version": "0.0.1",
   "description": "The open-source Lighthouse for AI Agents. Audits agentic web readiness, llms.txt, crawler access, and DOM actionability.",
   "author": "Akash Priyadarshi <272530059+AkashPriyadarshii@users.noreply.github.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashPriyadarshii/agentprobe.git"
+  },
+  "homepage": "https://github.com/AkashPriyadarshii/agentprobe#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "agentprobe": "./dist/cli.js"
+    "agentprobe": "dist/cli.js"
   },
   "files": [
     "dist"
