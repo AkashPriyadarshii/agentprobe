@@ -1,0 +1,45 @@
+{
+  "name": "agentprobe",
+  "version": "0.0.1",
+  "description": "The open-source Lighthouse for AI Agents. Audits agentic web readiness, llms.txt, crawler access, and DOM actionability.",
+  "author": "Akash Priyadarshi <272530059+AkashPriyadarshii@users.noreply.github.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "agentprobe": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "ai-agent",
+    "agentic-web",
+    "llms-txt",
+    "lighthouse",
+    "seo",
+    "geo",
+    "audit",
+    "cli"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "commander": "^12.1.0",
+    "picocolors": "^1.1.1",
+    "robots-parser": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  }
+}
