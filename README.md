@@ -8,6 +8,8 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 
 <div align="center">
 
+  <img src="assets/agentprobe.svg" width="96" alt="agentprobe logo" />
+
   <h1><code>agentprobe</code> 🤖</h1>
 
   <p><strong>The Open-Source Lighthouse for AI Agents. Audit agentic web readiness, llms.txt, crawler access, and DOM actionability in seconds.</strong></p>
@@ -49,7 +51,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 **How fast?** Audits live URLs or local `./dist` static builds in under 2 seconds.
 
 ```console
-$ npx agentprobe https://akashpriyadarshi.is-a.dev
+$ npx @akashpriyadarshii/agentprobe https://akashpriyadarshi.is-a.dev
 
   ┌──────────────────────────────────────────────────────────────┐
   │                    agentprobe v0.0.1                         │
@@ -110,7 +112,7 @@ Generates a spec-compliant `llms.txt` and an AI-crawler-friendly `robots.txt` di
 
 ```bash
 # bash/zsh (~/.bashrc or ~/.zshrc)
-alias probe='npx agentprobe'
+alias probe='npx @akashpriyadarshii/agentprobe'
 ```
 
 ```powershell
