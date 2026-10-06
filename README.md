@@ -10,7 +10,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 
   <img src="assets/agentprobe.svg" width="96" alt="agentprobe logo" />
 
-  <h1><code>agentprobe</code> 🤖</h1>
+  <h1><code>agentprobe</code></h1>
 
   <p><strong>The Open-Source Lighthouse for AI Agents. Audit agentic web readiness, llms.txt, crawler access, and DOM actionability in seconds.</strong></p>
 
@@ -79,7 +79,7 @@ Websites designed only for human eyeballs break when autonomous agents attempt t
 * **Empty client-side hydration traps:** Single-page applications (SPAs) that serve empty `<div id="root"></div>` shells blind static AI crawlers that do not execute heavy client-side JavaScript.
 * **Dead-end interactive controls:** Icon-only buttons without text or `aria-label` prevent autonomous browsing agents from clicking navigation items, executing searches, or submitting forms.
 
-`agentprobe` gives you an empirical **0–100 Agent Readiness Score** with a prioritized checklist of fixes before you deploy.
+`agentprobe` gives you an empirical **0-100 Agent Readiness Score** with a prioritized checklist of fixes before you deploy.
 
 ---
 
@@ -142,7 +142,7 @@ Set-Alias probe agentprobe
 | Option | Default | Description |
 |---|:---:|---|
 | `<TARGET>` | *Required* | URL (`https://...` or `http://localhost:3000`) or static directory (`./dist`). |
-| `--min-score <n>` | `80` | Minimum passing score threshold (0–100) for CI quality gates. |
+| `--min-score <n>` | `80` | Minimum passing score threshold (0-100) for CI quality gates. |
 | `--json` | `false` | Outputs machine-readable JSON to `stdout` for programmatic analysis. |
 | `--summary` | `false` | Outputs GitHub Step Summary Markdown for pull request checks. |
 | `--no-color` | `false` | Disables ANSI colors in terminal output (respects `NO_COLOR=1`). |
