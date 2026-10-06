@@ -17,7 +17,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
   <p>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0055ff.svg?style=flat-square" alt="MIT License" /></a>
     <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe"><img src="https://img.shields.io/npm/v/@akashpriyadarshii/agentprobe?style=flat-square" alt="npm version" /></a>
-    <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-2a3138.svg?style=flat-square" alt="Node >=18" /></a>
+    <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D20.0.0-2a3138.svg?style=flat-square" alt="Node >=20" /></a>
     <a href="https://github.com/AkashPriyadarshii/agentprobe/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/AkashPriyadarshii/agentprobe/ci.yml?branch=main&style=flat-square&label=ci" alt="CI Status" /></a>
   </p>
 
