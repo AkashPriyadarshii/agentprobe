@@ -1,0 +1,23 @@
+name: 'AgentProbe: Agent Readiness Gate'
+description: 'Lighthouse for AI Agents. Audits agentic web readiness, llms.txt, crawler permissions, and DOM actionability.'
+author: 'Akash Priyadarshi'
+branding:
+  icon: 'cpu'
+  color: 'purple'
+
+inputs:
+  target:
+    description: 'Target URL (e.g. https://preview.domain.com) or static build directory (e.g. ./dist)'
+    required: true
+  min-score:
+    description: 'Minimum required score (0-100) to pass the CI gate'
+    required: false
+    default: '80'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Run AgentProbe
+      shell: bash
+      run: |
+        npx agentprobe "${{ inputs.target }}" --min-score "${{ inputs.min-score }}" --summary >> $GITHUB_STEP_SUMMARY
