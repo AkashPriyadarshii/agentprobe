@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="agentprobe logo: optical scanner beacon and radar probe">
+  <title>agentprobe</title>
+  <!-- Chassis: dark high-contrast container with precision border -->
+  <rect width="96" height="96" rx="20" fill="#0b0f19" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- Lighthouse scanner beam: ambient light cone -->
+  <polygon points="48,50 20,18 76,18" fill="#38bdf8" fill-opacity="0.12"/>
+  <line x1="48" y1="50" x2="20" y2="18" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.35"/>
+  <line x1="48" y1="50" x2="76" y2="18" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.35"/>
+
+  <!-- Radar / sensor range rings -->
+  <circle cx="48" cy="50" r="28" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="48" cy="50" r="18" fill="none" stroke="#0284c7" stroke-width="2"/>
+
+  <!-- Precision reticle calibration ticks -->
+  <line x1="16" y1="50" x2="22" y2="50" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="74" y1="50" x2="80" y2="50" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="48" y1="72" x2="48" y2="78" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Probe spire: dual-tone faceted geometric beacon -->
+  <polygon points="48,28 54,46 48,54 42,46" fill="#1d4ed8"/>
+  <polygon points="48,28 54,46 48,50" fill="#38bdf8"/>
+
+  <!-- Optical lens core: high-luminance sensor beacon -->
+  <circle cx="48" cy="50" r="5" fill="#00f0ff"/>
+  <circle cx="48" cy="50" r="2" fill="#ffffff"/>
+
+  <!-- Signal emission arcs -->
+  <path d="M42 22 A8 8 0 0 1 54 22" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+  <path d="M36 16 A16 16 0 0 1 60 16" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

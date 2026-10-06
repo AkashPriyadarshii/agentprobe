@@ -1,4 +1,4 @@
-import { auditTarget } from '../../src/core/runner.js';
+import { auditTarget } from '../src/core/runner.js';
 
 // ponytail: no rate limit or result cache, add when abuse or cost shows up
 function isBlockedHost(host: string): boolean {
