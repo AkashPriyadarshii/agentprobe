@@ -8,7 +8,9 @@ function isBlockedHost(host: string): boolean {
     h.startsWith('127.') ||
     h.startsWith('10.') ||
     h.startsWith('192.168.') ||
-    h === '[::1]' ||
+    h.startsWith('172.') ||
+    h === '0.0.0.0' ||
+    h === '[::]' ||
     h.endsWith('.local') ||
     h.endsWith('.internal')
   );
@@ -21,8 +23,9 @@ export default async function handler(req: any, res: any) {
     return;
   }
   let target: URL;
+  const withScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(raw) ? raw : `https://${raw}`;
   try {
-    target = new URL(raw);
+    target = new URL(withScheme);
   } catch {
     res.status(400).json({ error: 'Invalid URL' });
     return;
