@@ -23,6 +23,8 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 
   <p>By <strong><a href="https://github.com/AkashPriyadarshii">Akash Priyadarshi</a></strong> · MIT · Zero dependencies to inspect · Single command</p>
 
+  <p><strong><a href="https://agentprobe-self.vercel.app">Try the live audit</a></strong> - paste a URL, get a 0-100 score in seconds. No signup.</p>
+
   <p>
     <a href="#direct-answer">Direct answer</a> &bull;
     <a href="#why-agentprobe">Why</a> &bull;

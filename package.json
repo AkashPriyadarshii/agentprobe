@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/AkashPriyadarshii/agentprobe.git"
   },
-  "homepage": "https://github.com/AkashPriyadarshii/agentprobe#readme",
+  "homepage": "https://agentprobe-self.vercel.app",
   "publishConfig": {
     "access": "public"
   },

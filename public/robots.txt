@@ -46,4 +46,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://agentprobe.vercel.app/sitemap.xml
+Sitemap: https://agentprobe-self.vercel.app/sitemap.xml

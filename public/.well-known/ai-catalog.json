@@ -2,7 +2,7 @@
   "name": "agentprobe",
   "version": "0.0.2",
   "description": "The open-source Lighthouse for AI Agents",
-  "homepage": "https://agentprobe.vercel.app",
+  "homepage": "https://agentprobe-self.vercel.app",
   "repository": "https://github.com/AkashPriyadarshii/agentprobe",
   "capabilities": ["web-audit", "llms-txt-check", "robots-txt-check", "json-ld-check", "ci-gate"],
   "endpoints": {
