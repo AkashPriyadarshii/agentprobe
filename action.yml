@@ -20,4 +20,4 @@ runs:
     - name: Run AgentProbe
       shell: bash
       run: |
-        npx agentprobe "${{ inputs.target }}" --min-score "${{ inputs.min-score }}" --summary >> $GITHUB_STEP_SUMMARY
+        npx -y @akashpriyadarshii/agentprobe "${{ inputs.target }}" --min-score "${{ inputs.min-score }}" --summary >> "$GITHUB_STEP_SUMMARY"
