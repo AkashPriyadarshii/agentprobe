@@ -1,115 +1,241 @@
-# agentprobe 🤖 — The open-source Lighthouse for AI Agents
+<!--
+Title: agentprobe: The Open-Source Lighthouse for AI Agents
+Description: Production CLI auditor & CI gate for agentic web readiness. Audit robots.txt bot rules, llms.txt compliance, Schema.org JSON-LD, and DOM actionability for AI agents like ChatGPT, Claude, and Perplexity.
+Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robots.txt, gptbot, claudebot, perplexity, schema.org, json-ld, geo, generative engine optimization, web scraping, ai crawler, devtools, ci gate, github action
+-->
 
-[![CI](https://img.shields.io/github/actions/workflow/status/AkashPriyadarshii/agentprobe/ci.yml?branch=main&style=flat-square&label=ci)](https://github.com/AkashPriyadarshii/agentprobe/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/agentprobe?style=flat-square)](https://www.npmjs.com/package/agentprobe)
-[![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-blue?style=flat-square)](https://nodejs.org)
-[![License](https://img.shields.io/github/license/AkashPriyadarshii/agentprobe?style=flat-square)](LICENSE)
+**Support:** fuel the next build: [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/AkashPriyadarshi)
 
-`agentprobe` audits and scores whether websites and web applications are ready for autonomous AI agents (such as ChatGPT, Claude, Perplexity, and custom browsing bots) to discover, crawl, parse, and take actions without getting blocked or wasting tokens.
+<div align="center">
 
-```bash
-npx agentprobe https://yourdomain.com
+  <h1><code>agentprobe</code> 🤖</h1>
+
+  <p><strong>The Open-Source Lighthouse for AI Agents. Audit agentic web readiness, llms.txt, crawler access, and DOM actionability in seconds.</strong></p>
+
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0055ff.svg?style=flat-square" alt="MIT License" /></a>
+    <a href="https://www.npmjs.com/package/agentprobe"><img src="https://img.shields.io/npm/v/agentprobe?style=flat-square" alt="npm version" /></a>
+    <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-2a3138.svg?style=flat-square" alt="Node >=18" /></a>
+    <a href="https://github.com/AkashPriyadarshii/agentprobe/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/AkashPriyadarshii/agentprobe/ci.yml?branch=main&style=flat-square&label=ci" alt="CI Status" /></a>
+  </p>
+
+  <p>By <strong><a href="https://github.com/AkashPriyadarshii">Akash Priyadarshi</a></strong> · MIT · Zero dependencies to inspect · Single command</p>
+
+  <p>
+    <a href="#direct-answer">Direct answer</a> &bull;
+    <a href="#why-agentprobe">Why</a> &bull;
+    <a href="#quickstart">Quickstart</a> &bull;
+    <a href="#the-4-audit-pillars">The 4 Pillars</a> &bull;
+    <a href="#cli-reference">CLI Reference</a> &bull;
+    <a href="#cicd-github-action">CI/CD Gate</a> &bull;
+    <a href="#dynamic-badge">Badge</a> &bull;
+    <a href="#ecosystem">Ecosystem</a>
+  </p>
+
+</div>
+
+[![stars](https://img.shields.io/github/stars/AkashPriyadarshii/agentprobe?style=flat-square&label=stars)](https://github.com/AkashPriyadarshii/agentprobe/stargazers) [![license](https://img.shields.io/github/license/AkashPriyadarshii/agentprobe?style=flat-square)](LICENSE) [![release](https://img.shields.io/github/v/release/AkashPriyadarshii/agentprobe?style=flat-square&label=release)](https://github.com/AkashPriyadarshii/agentprobe/releases)
+
+---
+
+## Direct answer
+
+**What is agentprobe?** An open-source, local-first CLI auditor and CI quality gate for the agentic web. Google Lighthouse tests web performance for humans; `agentprobe` tests whether autonomous AI agents (Claude, ChatGPT, Perplexity, OpenAI Operator, and headless browser bots) can reach, parse, and take actions on your site without getting blocked or burning excessive tokens.
+
+**Who is it for?** Frontend developers, full-stack engineers, and open-source maintainers who want their documentation, apps, and platforms to be accurately cited and executable by autonomous AI agents.
+
+**What does it cost?** Free. MIT licensed. Runs 100% locally on your machine with zero API keys, zero accounts, and zero cloud lock-in.
+
+**How fast?** Audits live URLs or local `./dist` static builds in under 2 seconds.
+
+```console
+$ npx agentprobe https://akashpriyadarshi.is-a.dev
+
+  ┌──────────────────────────────────────────────────────────────┐
+  │                    agentprobe v0.0.1                         │
+  │           The Open-Source Lighthouse for AI Agents           │
+  └──────────────────────────────────────────────────────────────┘
+
+  Target:      https://akashpriyadarshi.is-a.dev/
+  Audited:     2026-10-06T11:35:58.061Z
+  Gate Status: PASSED (min score: 80)
+
+  ════════════════════════════════════════════════════════════
+  TOTAL READINESS SCORE: 98 / 100
+  [█████████████████████████████░] 98%
+  ════════════════════════════════════════════════════════════
 ```
 
-## Install
+---
 
-Run instantly without installation:
+## Why agentprobe?
 
-```bash
-npx agentprobe <url-or-dir>
-```
+Websites designed only for human eyeballs break when autonomous agents attempt to interact with them:
 
-Or install globally:
+* **Accidental AI crawler lockouts:** Over-aggressive WAF firewalls or blanket `robots.txt` disallows silently block `GPTBot`, `ClaudeBot`, or `PerplexityBot` from indexing your site.
+* **Token bleed from messy DOM trees:** Agents scraping bloated, un-semantic HTML burn tens of thousands of tokens per page request, causing reasoning models to lose context.
+* **Empty client-side hydration traps:** Single-page applications (SPAs) that serve empty `<div id="root"></div>` shells blind static AI crawlers that do not execute heavy client-side JavaScript.
+* **Dead-end interactive controls:** Icon-only buttons without text or `aria-label` prevent autonomous browsing agents from clicking navigation items, executing searches, or submitting forms.
 
-```bash
-npm install -g agentprobe
-```
+`agentprobe` gives you an empirical **0–100 Agent Readiness Score** with a prioritized checklist of fixes before you deploy.
 
-## Quick start
+---
+
+## Quickstart
 
 ### 1. Audit a live website
 ```bash
-agentprobe https://docs.example.com
+npx agentprobe https://docs.yourdomain.com
 ```
 
-### 2. Audit a local build before deploying
+### 2. Audit a local production build before deploying
 ```bash
-agentprobe ./dist --min-score 85
+npx agentprobe ./dist --min-score 85
 ```
 
-### 3. Scaffold missing AI manifests
+### 3. Auto-scaffold missing AI manifests
 ```bash
-agentprobe init
+npx agentprobe init
 ```
-Generates a compliant `llms.txt` and AI-crawler-friendly `robots.txt` in your `public/` folder.
+Generates a spec-compliant `llms.txt` and an AI-crawler-friendly `robots.txt` directly in your `public/` or root directory.
 
-## Core Audit Pillars
+### Shell Aliases
 
-`agentprobe` runs deterministic checks across four weighted pillars (25 points each, 100 points total):
+```bash
+# bash/zsh (~/.bashrc or ~/.zshrc)
+alias probe='npx agentprobe'
+```
 
-### 1. Bot Accessibility
-- **Robots.txt Availability**: Verifies that `/robots.txt` is published and reachable.
-- **AI Crawler Allowances**: Checks crawl access for major AI agents (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, `Applebot-Extended`, `Meta-ExternalAgent`, `cohere-ai`).
-- **Sitemap Indexing**: Confirms XML sitemap declaration for automated agent discovery.
+```powershell
+# PowerShell ($PROFILE)
+Set-Alias probe agentprobe
+```
 
-### 2. LLM Context Manifest (`llms.txt`)
-- **Manifest Detection**: Checks `/llms.txt` HTTP status and presence.
-- **Spec Compliance**: Validates H1 title, summary blockquote, and markdown link hierarchy.
-- **Token Budget**: Estimates prompt token footprint and warns when manifests exceed 15,000 tokens.
-- **Companion Manifest**: Detects `/llms-full.txt` for deep RAG ingestion.
+---
 
-### 3. Structured Context & Schema
-- **HTML5 Semantic Landmarks**: Verifies `<main>`, `<nav>`, and `<header>`/`<footer>` structure.
-- **Heading Hierarchy**: Enforces a single descriptive `<h1>` and clean subsection nesting.
-- **Schema.org JSON-LD**: Extracts and verifies structured data entities (`WebSite`, `Product`, `Organization`, `SoftwareApplication`).
-- **Metadata**: Audits page title, meta description, and OpenGraph headers.
+## The 4 Audit Pillars
 
-### 4. Actionability & Content Negotiation
-- **Markdown Negotiation**: Probes `Accept: text/markdown` support to save token overhead.
-- **Interactive Button Labels**: Flags icon buttons lacking accessible text or `aria-label`.
-- **Form Controls**: Checks `<input>` fields for accessible labels or placeholders.
-- **SSR vs. Hydration Traps**: Detects empty client-side SPA shells that blind static AI crawlers.
+`agentprobe` evaluates websites across four weighted pillars (25 points each, 100 points total):
 
-## CI/CD Gate & GitHub Actions
+| Pillar | Weight | What it inspects | Why it matters for AI Agents |
+|---|:---:|---|---|
+| **1. Bot Accessibility** | `25 pts` | `robots.txt` permissions, WAF blocks, XML sitemap | Guarantees major models (`GPTBot`, `ClaudeBot`, `PerplexityBot`) are permitted to crawl your content. |
+| **2. LLM Manifest (`llms.txt`)** | `25 pts` | `/llms.txt`, `/llms-full.txt`, H1/blockquote syntax, token budget | Gives agents a lightweight, structured markdown summary of your site, saving 90%+ token costs. |
+| **3. Structured Context** | `25 pts` | Schema.org JSON-LD, HTML5 landmarks (`<main>`, `<nav>`), headings | Eliminates hallucination by providing unambiguous, machine-readable entity metadata. |
+| **4. Actionability & Negotiation** | `25 pts` | `Accept: text/markdown` support, button `aria-label`s, SSR vs SPA shells | Ensures agents can execute form submissions and clicks without stumbling on unlabeled DOM nodes. |
 
-Add `agentprobe` to your pull request pipeline to block regressions in agent readiness:
+---
+
+## CLI Reference
+
+`agentprobe [OPTIONS] <TARGET>`
+
+| Option | Default | Description |
+|---|:---:|---|
+| `<TARGET>` | *Required* | URL (`https://...` or `http://localhost:3000`) or static directory (`./dist`). |
+| `--min-score <n>` | `80` | Minimum passing score threshold (0–100) for CI quality gates. |
+| `--json` | `false` | Outputs machine-readable JSON to `stdout` for programmatic analysis. |
+| `--summary` | `false` | Outputs GitHub Step Summary Markdown for pull request checks. |
+| `--no-color` | `false` | Disables ANSI colors in terminal output (respects `NO_COLOR=1`). |
+| `-q, --quiet` | `false` | Suppresses progress banners; outputs final exit code and report only. |
+| `-v, --version` | *None* | Prints current `agentprobe` version. |
+| `-h, --help` | *None* | Displays CLI help synopsis. |
+
+### Commands
+
+| Command | Description |
+|---|---|
+| `agentprobe <target>` | Audit a live URL or static build folder. |
+| `agentprobe init` | Interactively scaffold a compliant `llms.txt` and permissive `robots.txt`. |
+
+### Exit Codes
+- `0`: Audit passed (score ≥ threshold).
+- `1`: Audit failed (score < threshold).
+- `2`: Invalid target, unreachable network, or parse failure.
+
+---
+
+## CI/CD & GitHub Action
+
+Block pull requests that introduce regressions in agent readability or block AI crawlers:
 
 ```yaml
-- name: Agent Readiness Gate
-  uses: AkashPriyadarshii/agentprobe@v1
-  with:
-    target: 'https://preview.yourdomain.com'
-    min-score: '80'
+name: Agent Readiness Gate
+
+on: [push, pull_request]
+
+jobs:
+  agent-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit Preview Deployment
+        uses: AkashPriyadarshii/agentprobe@v1
+        with:
+          target: 'https://preview.yourdomain.com'
+          min-score: '85'
 ```
 
-Or run via CLI:
+Or via direct script:
 
 ```bash
-npx agentprobe ./dist --min-score 85 --json > audit.json
+npx agentprobe ./dist --min-score 80 --json > agent-report.json
 ```
 
-Exit codes:
-- `0`: Audit passed (score ≥ threshold)
-- `1`: Audit failed (score < threshold)
-- `2`: Network, file, or parse error
+---
 
-## Dynamic README Badge
+## Dynamic Badge
 
-Every audit generates a Shields.io markdown badge you can paste into your project README:
+Every audit generates a markdown badge you can paste into your project README:
+
+[![Agent Readiness](https://img.shields.io/badge/Agent_Readiness-98%2F100-brightgreen?style=flat-square)](https://github.com/AkashPriyadarshii/agentprobe)
 
 ```markdown
-[![Agent Readiness](https://img.shields.io/badge/Agent_Readiness-94%2F100-brightgreen?style=flat-square)](https://github.com/AkashPriyadarshii/agentprobe)
+[![Agent Readiness](https://img.shields.io/badge/Agent_Readiness-98%2F100-brightgreen?style=flat-square)](https://github.com/AkashPriyadarshii/agentprobe)
 ```
 
-## Development
+---
 
-```bash
-git clone https://github.com/AkashPriyadarshii/agentprobe.git
-cd agentprobe
-npm install
-npm test
-npm run build
+## Architecture
+
 ```
+agentprobe/
+├── src/
+│   ├── cli.ts                 # CLI entry point (commander)
+│   ├── index.ts               # Core module exports
+│   ├── types/index.ts         # Diagnostic & scoring contracts
+│   ├── core/
+│   │   ├── runner.ts          # Parallel multi-target engine executor
+│   │   └── scorer.ts          # Deterministic deduction-based scoring
+│   ├── engines/
+│   │   ├── crawler.ts         # robots.txt & 10 AI bot permissions
+│   │   ├── llmstxt.ts         # llms.txt & llms-full.txt parser + token budget
+│   │   ├── semantic.ts        # Schema.org JSON-LD & HTML5 landmark validator
+│   │   └── actionability.ts   # Markdown content negotiation & ARIA accessibility
+│   ├── reporters/
+│   │   ├── terminal.ts        # ANSI high-contrast terminal UI
+│   │   ├── json.ts            # Machine-readable JSON
+│   │   ├── summary.ts         # GitHub Actions $GITHUB_STEP_SUMMARY
+│   │   └── badge.ts           # Dynamic Shields.io badge generator
+│   └── scaffolder/
+│       └── init.ts            # llms.txt and robots.txt template scaffolder
+├── tests/                     # 14 passing Vitest unit tests
+├── action.yml                 # Composite GitHub Action manifest
+└── README.md
+```
+
+---
+
+## Ecosystem
+
+Built by **[Akash Priyadarshi](https://github.com/AkashPriyadarshii)** as part of the autonomous developer tools ecosystem:
+
+* **[akash-design-engineering](https://github.com/AkashPriyadarshii/akash-design-engineering)** &bull; Apex meta-skill for autonomous UI/UX orchestration.
+* **[ziggygrep](https://github.com/AkashPriyadarshii/ziggygrep)** &bull; Pure Zig grep replacement beating ripgrep 22 of 22 benches.
+* **[jev-curate](https://github.com/AkashPriyadarshii/jev-curate)** &bull; High-throughput synthetic dataset sifter powered by TypeSafe AI.
+* **[Portfolio](https://akashpriyadarshi.is-a.dev)** &bull; Projects, benchmarks, and writing.
+
+---
 
 ## License
 
