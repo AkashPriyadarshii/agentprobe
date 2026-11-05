@@ -245,7 +245,7 @@ agentprobe/
 
 Built by **[Akash Priyadarshi](https://github.com/AkashPriyadarshii)** as part of the autonomous developer tools ecosystem:
 
-* **[akash-design-engineering](https://github.com/AkashPriyadarshii/akash-design-engineering)** &bull; Apex meta-skill for autonomous UI/UX orchestration.
+* **[My-Starred-Repos](https://github.com/AkashPriyadarshii/My-Starred-Repos)** &bull; 1,350+ hand-curated developer tools & AI agent knowledge hub.
 * **[ziggygrep](https://github.com/AkashPriyadarshii/ziggygrep)** &bull; Pure Zig grep replacement beating ripgrep 22 of 22 benches.
 * **[jev-curate](https://github.com/AkashPriyadarshii/jev-curate)** &bull; High-throughput synthetic dataset sifter powered by TypeSafe AI.
 * **[Portfolio](https://akashpriyadarshi.is-a.dev)** &bull; Projects, benchmarks, and writing.

@@ -2,84 +2,294 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Docs - agentprobe</title>
-<meta name="description" content="Install agentprobe, run the 5-pillar audit, gate deploys in CI. Flags, exit codes, and the GitHub Action.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Documentation — agentprobe</title>
+<meta name="description" content="Install agentprobe, run the 5-pillar audit, gate deploys in CI/CD. CLI flags, exit codes, and GitHub Action setup.">
 <link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
+
 <style>
-:root{--bg:#0b0f19;--panel:#111827;--border:#1e293b;--text:#e5e7eb;--dim:#94a3b8;--accent:#38bdf8}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.6;padding:0 16px}
-main{max-width:760px;margin:0 auto;padding:48px 0 80px}
-a{color:var(--accent)}
-section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin:16px 0}
-h1{font-size:24px;margin-bottom:8px}
-h2{font-size:17px;margin-bottom:10px}
-p,li{font-size:14px}
-ul{margin:8px 0 0 18px}
-pre{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px;overflow-x:auto;font-size:13px;margin-top:10px;white-space:pre-wrap}
-code{color:var(--accent)}
-table{width:100%;font-size:13px;border-collapse:collapse;margin-top:8px}
-td{padding:6px 4px;border-top:1px solid var(--border)}
-nav{margin-bottom:16px;font-size:14px}
+:root {
+  --bg: #090d16;
+  --surface: #0f172a;
+  --panel: #131d31;
+  --border: #1e293b;
+  --border-focus: #38bdf8;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --accent: #38bdf8;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  padding: 0 20px;
+  min-height: 100vh;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0 80px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+nav a { color: var(--text-muted); text-decoration: none; font-weight: 500; }
+nav a:hover { color: var(--accent); }
+.brand { color: var(--text); font-weight: 700; font-size: 16px; }
+
+h1 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.lead {
+  color: var(--text-muted);
+  font-size: 16px;
+  margin-bottom: 32px;
+}
+
+section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+p, li { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+ul { margin: 8px 0 0 20px; }
+li { margin-bottom: 4px; }
+
+pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #e2e8f0;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+code {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 13px;
+}
+
+table {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th {
+  text-align: left;
+  padding: 8px 10px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+}
+tr:last-child td { border-bottom: none; }
+td strong { color: var(--text); }
+
+footer {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+}
+footer a { color: var(--text-muted); text-decoration: none; }
+footer a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
 <main>
-<nav><a href="/">agentprobe</a> / docs</nav>
-<h1>Docs</h1>
-<section>
-<h2>Install and run</h2>
-<pre>npx @akashpriyadarshii/agentprobe https://your-site.com
-npm install -g @akashpriyadarshii/agentprobe
-agentprobe https://your-site.com</pre>
-</section>
-<section>
-<h2>Audit a local build</h2>
-<pre>agentprobe ./dist --min-score 85</pre>
-</section>
-<section>
-<h2>Scaffold missing manifests</h2>
-<pre>agentprobe init</pre>
-<p style="margin-top:8px">You get llms.txt, a 15-bot robots.txt, .well-known/ai-catalog.json, and .well-known/mcp.json in your public dir.</p>
-</section>
-<section>
-<h2>The 5 pillars</h2>
-<table>
-<tr><td>Bot Accessibility</td><td>20 pts - robots.txt across 15 AI crawlers, sitemap</td></tr>
-<tr><td>LLM Manifest</td><td>20 pts - /llms.txt, /llms-full.txt, token budget</td></tr>
-<tr><td>Structured Context</td><td>20 pts - JSON-LD, landmarks, headings</td></tr>
-<tr><td>Actionability</td><td>20 pts - markdown negotiation, aria labels, SSR content</td></tr>
-<tr><td>Protocol Discovery</td><td>20 pts - ai-catalog.json, mcp.json, skills, x402</td></tr>
-</table>
-</section>
-<section>
-<h2>Flags</h2>
-<table>
-<tr><td>--min-score &lt;n&gt;</td><td>Pass threshold 0-100, default 80</td></tr>
-<tr><td>--json</td><td>Machine JSON on stdout</td></tr>
-<tr><td>--plain</td><td>Plain text for agents and scripts</td></tr>
-<tr><td>--summary</td><td>GitHub Step Summary markdown</td></tr>
-<tr><td>--no-color</td><td>Disable ANSI colors</td></tr>
-<tr><td>-q, --quiet</td><td>Report only</td></tr>
-</table>
-</section>
-<section>
-<h2>Exit codes</h2>
-<ul>
-<li>0: score meets threshold</li>
-<li>1: score below threshold</li>
-<li>2: bad target, network failure, parse failure</li>
-</ul>
-</section>
-<section>
-<h2>CI gate</h2>
-<pre>uses: AkashPriyadarshii/agentprobe@v1
-with:
-  target: 'https://preview.your-site.com'
-  min-score: '85'</pre>
-<pre>npx @akashpriyadarshii/agentprobe ./dist --min-score 80 --json &gt; agent-report.json</pre>
-</section>
+  <nav aria-label="Primary">
+    <a href="/" class="brand">&larr; agentprobe</a>
+    <div>
+      <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a> &bull;
+      <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
+    </div>
+  </nav>
+
+  <h1>Documentation</h1>
+  <p class="lead">Complete CLI commands, engine specifications, CI gates, and configuration.</p>
+
+  <section>
+    <h2>Installation & Quickstart</h2>
+    <p>Run instantly with <code>npx</code> without installing:</p>
+    <pre><code>npx @akashpriyadarshii/agentprobe https://your-site.com</code></pre>
+    <p style="margin-top:12px;">Or install globally to use anywhere in terminal:</p>
+    <pre><code>npm install -g @akashpriyadarshii/agentprobe
+agentprobe https://your-site.com</code></pre>
+  </section>
+
+  <section>
+    <h2>Local Static Build Auditing</h2>
+    <p>Audit a production static export folder (e.g. <code>dist</code>, <code>build</code>, or <code>out</code>) before deploying:</p>
+    <pre><code>agentprobe ./dist --min-score 85</code></pre>
+    <p style="margin-top:8px;">Exit code is <code>0</code> if score &ge; 85, or <code>1</code> if regressions exist.</p>
+  </section>
+
+  <section>
+    <h2>Auto-Scaffold Missing Manifests</h2>
+    <p>Interactively scaffold compliant manifests for your project:</p>
+    <pre><code>agentprobe init</code></pre>
+    <p style="margin-top:8px;">Generates a spec-compliant <code>llms.txt</code>, a 15-bot permissive <code>robots.txt</code>, and discovery manifests (<code>.well-known/ai-catalog.json</code> and <code>.well-known/mcp.json</code>).</p>
+  </section>
+
+  <section>
+    <h2>The 5 Audit Pillars (20 pts each, 100 max)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Pillar</th>
+          <th>Max</th>
+          <th>What it inspects</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Bot Accessibility</strong></td>
+          <td>20 pts</td>
+          <td><code>robots.txt</code> crawl permissions across 15 AI bots (GPTBot, ClaudeBot, PerplexityBot, ByteSpider, etc.) + XML sitemap presence.</td>
+        </tr>
+        <tr>
+          <td><strong>2. LLM Manifest</strong></td>
+          <td>20 pts</td>
+          <td><code>/llms.txt</code> and <code>/llms-full.txt</code> compliance, H1 syntax, token density, and section taxonomy.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Structured Context</strong></td>
+          <td>20 pts</td>
+          <td>Schema.org JSON-LD graphs, HTML5 landmarks (<code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>), and heading hierarchies.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Actionability</strong></td>
+          <td>20 pts</td>
+          <td>Markdown content negotiation (<code>Accept: text/markdown</code>), interactive button ARIA labels, and SSR hydration traps.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Protocol Discovery</strong></td>
+          <td>20 pts</td>
+          <td>Agentic Resource Discovery (<code>ai-catalog.json</code>), Model Context Protocol (<code>mcp.json</code>), and <code>x402</code> payment headers.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>CLI Flags & Options</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Flag</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>--min-score &lt;n&gt;</code></td>
+          <td>Minimum passing score threshold (0-100, default 80).</td>
+        </tr>
+        <tr>
+          <td><code>--json</code></td>
+          <td>Outputs machine-readable JSON to stdout for scripts or telemetry.</td>
+        </tr>
+        <tr>
+          <td><code>--plain</code></td>
+          <td>Plain text without ANSI formatting for AI coding agents.</td>
+        </tr>
+        <tr>
+          <td><code>--summary</code></td>
+          <td>Outputs GitHub Step Summary markdown for pull requests.</td>
+        </tr>
+        <tr>
+          <td><code>--no-color</code></td>
+          <td>Disables terminal ANSI colors (respects <code>NO_COLOR=1</code>).</td>
+        </tr>
+        <tr>
+          <td><code>-q, --quiet</code></td>
+          <td>Suppresses banners, outputs final status and exit code only.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Exit Codes</h2>
+    <ul>
+      <li><code>0</code>: Audit passed (score &ge; threshold).</li>
+      <li><code>1</code>: Audit failed (score &lt; threshold).</li>
+      <li><code>2</code>: Invalid target, unreachable network host, or parse error.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>CI/CD Pipeline Setup</h2>
+    <p>Add to <code>.github/workflows/agent-readiness.yml</code>:</p>
+    <pre><code>name: Agent Readiness Gate
+on: [push, pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit Preview URL
+        uses: AkashPriyadarshii/agentprobe@v1
+        with:
+          target: 'https://preview.your-site.com'
+          min-score: '85'</code></pre>
+  </section>
+
+  <footer>
+    <p>Built with pride by <a href="https://github.com/AkashPriyadarshii" target="_blank" rel="noopener">Akash Priyadarshi</a> &bull; MIT License &bull; <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a></p>
+  </footer>
 </main>
 </body>
 </html>

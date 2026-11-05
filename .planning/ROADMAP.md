@@ -26,3 +26,23 @@
   - Standard README with badges and quickstart
   - GitHub Action definition (`action.yml`)
   - MIT License
+
+## Next Milestone: v0.1.0 — Production Agentic Diagnostics & MCP
+- [ ] **Phase 7: Engine Hardening & Gap Remediation**
+  - WAF / Cloudflare Bot Fight Mode detection (`cf-mitigated`, `cf-ray`, 403 challenge pages)
+  - HTTP `X-Robots-Tag` header and HTML `<meta name="robots">` parsing
+  - Strict `Content-Type` validation on `/llms.txt` to reject SPA HTML 200 traps
+  - Sample HEAD checks on the first 3–5 links inside `llms.txt`
+  - DOM-to-Text Token Density calculation (flagging heavy client hydration bloat)
+  - Locator hook checks (`data-testid`, IDs, ARIA labels on interactive elements)
+- [ ] **Phase 8: Model Context Protocol (MCP) Server**
+  - Native stdio MCP server mode (`agentprobe mcp`) via `@modelcontextprotocol/sdk`
+  - Core tools: `audit_url` and `audit_local` for Claude Desktop, Claude Code, and Cursor
+- [ ] **Phase 9: Streaming SSE & High-Performance Caching**
+  - Real-time Server-Sent Events endpoint (`/api/audit?stream=true`)
+  - Deterministic ETag generation and HTTP 304 Not Modified caching
+  - Progressive streaming audit UI in web interface
+- [ ] **Phase 10: Protocol Verification & Commerce**
+  - Schema validation for `/.well-known/mcp.json` and `ai-catalog.json`
+  - Permissive CORS verification (`Access-Control-Allow-Origin: *`) on discovery manifests
+  - Active L402 / x402 lightning micropayment header negotiation
