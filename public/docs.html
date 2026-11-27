@@ -61,6 +61,7 @@
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
       <button class="cmdk-trigger" id="cmdk-trigger" type="button" aria-label="Open command palette" aria-haspopup="dialog" aria-controls="cmdk-modal" title="Command palette (⌘K)">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <span class="cmdk-trigger-label">Search</span>
         <kbd>⌘K</kbd>
       </button>
@@ -147,8 +148,8 @@ console.log(report.totalScore);</pre>
 <dialog id="cmdk-modal" class="cmdk-modal" aria-label="Command palette">
   <div class="cmdk-panel">
     <div class="cmdk-head">
-      <input class="cmdk-input" id="cmdk-input" type="search" placeholder="Type a command or jump to..." aria-label="Search commands" autocomplete="off" spellcheck="false">
-      <kbd class="cmdk-esc">Esc</kbd>
+      <input class="cmdk-input" id="cmdk-input" type="search" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-controls="cmdk-list" placeholder="Type a command or jump to..." aria-label="Search commands" autocomplete="off" autocapitalize="none" autocorrect="off" enterkeyhint="search" spellcheck="false">
+      <button class="cmdk-close" id="cmdk-close" type="button" aria-label="Close command palette">Esc</button>
     </div>
     <div class="cmdk-list" id="cmdk-list" role="listbox" aria-label="Commands"></div>
     <div class="cmdk-foot">

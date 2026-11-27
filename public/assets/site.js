@@ -63,9 +63,9 @@
       .delta-pos { color: var(--pass); font-weight: 600; }
       .delta-neg { color: var(--fail); font-weight: 600; }
       .delta-zero { color: var(--text-dim); }
-      .fix-drawer { grid-column: 2 / -1; margin-top: 0.35rem; }
-      .compare-matrix { width: 100%; border-collapse: collapse; font-size: 0.78rem; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+      .compare-matrix { width: 100%; border-collapse: collapse; font-size: 0.78rem; border: 0; }
       .compare-matrix th, .compare-matrix td { padding: 0.5rem 0.65rem; border-bottom: 1px solid var(--border); }
+      .compare-matrix th.num, .compare-matrix td.num { white-space: nowrap; }
       .compare-matrix th { background: var(--bg-subtle); color: var(--text-muted); font-weight: 600; }
       .compare-matrix tr:last-child td { border-bottom: 0; }
     `;
@@ -199,15 +199,18 @@
     if (!modal) return;
 
     const searchInput = modal.querySelector('#cmdk-input') || modal.querySelector('input');
+    const closeBtn = modal.querySelector('#cmdk-close');
     const listEl = modal.querySelector('#cmdk-list') || modal.querySelector('[role="listbox"]');
     let activeIndex = 0;
     let currentItems = [];
+    let lastFocused = null;
 
     function isOpen() {
       return typeof modal.showModal === 'function' ? Boolean(modal.open) : !modal.hidden;
     }
 
     function openModal() {
+      lastFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       if (typeof modal.showModal === 'function') {
         if (!modal.open) modal.showModal();
       } else {
@@ -215,6 +218,7 @@
       }
       if (searchInput) {
         searchInput.value = '';
+        searchInput.setAttribute('aria-expanded', 'true');
         renderItems('');
         requestAnimationFrame(() => searchInput.focus());
       } else {
@@ -228,6 +232,11 @@
       } else {
         modal.hidden = true;
       }
+      if (searchInput) searchInput.setAttribute('aria-expanded', 'false');
+      if (lastFocused && typeof lastFocused.focus === 'function') {
+        lastFocused.focus();
+      }
+      lastFocused = null;
     }
 
     function buildCommands() {
@@ -325,11 +334,16 @@
       activeIndex = 0;
 
       listEl.innerHTML = currentItems.map((item, idx) => (
-        '<button type="button" class="cmdk-item' + (idx === 0 ? ' is-active' : '') + '" role="option" aria-selected="' + (idx === 0) + '" data-cmdk-idx="' + idx + '">' +
+        '<button type="button" id="cmdk-opt-' + idx + '" class="cmdk-item' + (idx === 0 ? ' is-active' : '') + '" role="option" aria-selected="' + (idx === 0) + '" data-cmdk-idx="' + idx + '">' +
           '<span>' + escapeHtml(item.label) + '</span>' +
           '<span class="cmdk-item-hint">' + escapeHtml(item.hint) + '</span>' +
         '</button>'
       )).join('');
+
+      if (searchInput) {
+        if (currentItems.length) searchInput.setAttribute('aria-activedescendant', 'cmdk-opt-0');
+        else searchInput.removeAttribute('aria-activedescendant');
+      }
     }
 
     function syncActive() {
@@ -338,7 +352,10 @@
         const active = idx === activeIndex;
         btn.classList.toggle('is-active', active);
         btn.setAttribute('aria-selected', String(active));
-        if (active) btn.scrollIntoView({ block: 'nearest' });
+        if (active) {
+          btn.scrollIntoView({ block: 'nearest' });
+          if (searchInput) searchInput.setAttribute('aria-activedescendant', btn.id);
+        }
       });
     }
 
@@ -347,6 +364,10 @@
         if (isOpen()) closeModal();
         else openModal();
       });
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => closeModal());
     }
 
     if (searchInput) {
@@ -389,7 +410,7 @@
           activeIndex = (activeIndex - 1 + currentItems.length) % currentItems.length;
           syncActive();
         }
-      } else if (event.key === 'Enter') {
+      } else if (event.key === 'Enter' && (event.target === searchInput || (listEl && listEl.contains(event.target)))) {
         event.preventDefault();
         const item = currentItems[activeIndex];
         closeModal();
@@ -470,6 +491,7 @@
       const active = tab.dataset.mode === currentMode;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
+      tab.setAttribute('tabindex', active ? '0' : '-1');
     });
 
     if (input) input.hidden = currentMode === 'draft';
@@ -481,8 +503,21 @@
 
   onModeSwitch = switchMode;
 
-  document.querySelectorAll('.mode-tab[data-mode]').forEach((tab) => {
+  const modeTabs = Array.from(document.querySelectorAll('.mode-tab[data-mode]'));
+  modeTabs.forEach((tab, idx) => {
     tab.addEventListener('click', () => switchMode(tab.dataset.mode));
+    tab.addEventListener('keydown', (event) => {
+      let nextIdx = -1;
+      if (event.key === 'ArrowRight') nextIdx = (idx + 1) % modeTabs.length;
+      else if (event.key === 'ArrowLeft') nextIdx = (idx - 1 + modeTabs.length) % modeTabs.length;
+      else if (event.key === 'Home') nextIdx = 0;
+      else if (event.key === 'End') nextIdx = modeTabs.length - 1;
+      if (nextIdx >= 0) {
+        event.preventDefault();
+        switchMode(modeTabs[nextIdx].dataset.mode);
+        modeTabs[nextIdx].focus();
+      }
+    });
   });
 
   // --- History Bar Rendering (Tier 2) ---
@@ -962,6 +997,7 @@
       btn.classList.toggle('is-active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
+    let visibleGroups = 0;
     out.querySelectorAll('.check-group').forEach((group) => {
       let visibleCount = 0;
       group.querySelectorAll('.check').forEach((row) => {
@@ -970,8 +1006,25 @@
         if (match) visibleCount++;
       });
       group.hidden = visibleCount === 0;
+      if (visibleCount > 0) visibleGroups++;
       if (activeFilter !== 'all' && visibleCount > 0) group.open = true;
     });
+    const checksWrap = out.querySelector('.checks');
+    if (checksWrap) {
+      let emptyEl = checksWrap.querySelector('.checks-empty');
+      if (visibleGroups === 0) {
+        if (!emptyEl) {
+          emptyEl = document.createElement('div');
+          emptyEl.className = 'checks-empty';
+          emptyEl.setAttribute('role', 'status');
+          emptyEl.innerHTML = '<span>No checks match this filter.</span><button type="button" class="btn btn-sm" data-filter="all">Show all checks</button>';
+          checksWrap.appendChild(emptyEl);
+        }
+        emptyEl.hidden = false;
+      } else if (emptyEl) {
+        emptyEl.hidden = true;
+      }
+    }
   }
 
   function renderBadgeBox(report) {
@@ -981,7 +1034,7 @@
         '<div class="badge-box-head">' +
           '<span>README Badge Generator</span>' +
           '<div class="badge-preview">' +
-            '<img src="' + escapeHtml(b.apiImgUrl) + '" alt="Agent Readiness score badge" loading="lazy" onerror="this.src=\'' + escapeHtml(b.shieldsUrl) + '\'">' +
+            '<img src="' + escapeHtml(b.apiImgUrl) + '" alt="Agent Readiness score badge" loading="lazy" onerror="this.onerror=null;this.src=\'' + escapeHtml(b.shieldsUrl) + '\'">' +
           '</div>' +
         '</div>' +
         '<div class="micro">Live SVG (<code>/api/badge?url=</code>)</div>' +

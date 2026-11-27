@@ -69,6 +69,7 @@
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
       <button class="cmdk-trigger" id="cmdk-trigger" type="button" aria-label="Open command palette" aria-haspopup="dialog" aria-controls="cmdk-modal" title="Command palette (⌘K)">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <span class="cmdk-trigger-label">Search</span>
         <kbd>⌘K</kbd>
       </button>
@@ -97,20 +98,20 @@
           <span>100-pt scale</span>
         </div>
         <div class="mode-tabs" role="tablist" aria-label="Audit mode">
-          <button class="mode-tab is-active" type="button" role="tab" aria-selected="true" data-mode="url">Live URL</button>
-          <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="draft">Paste Draft</button>
-          <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="compare">Compare</button>
+          <button class="mode-tab is-active" id="tab-url" type="button" role="tab" aria-selected="true" aria-controls="audit-form" tabindex="0" data-mode="url">Live URL</button>
+          <button class="mode-tab" id="tab-draft" type="button" role="tab" aria-selected="false" aria-controls="audit-form" tabindex="-1" data-mode="draft">Paste Draft</button>
+          <button class="mode-tab" id="tab-compare" type="button" role="tab" aria-selected="false" aria-controls="audit-form" tabindex="-1" data-mode="compare">Compare</button>
         </div>
         <form id="audit-form" class="runner-form" novalidate>
-          <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
-          <input class="field" type="url" id="url-b" name="urlB" aria-label="Second target URL to compare" placeholder="https://competitor-site.com" inputmode="url" autocomplete="url" spellcheck="false" hidden>
+          <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" autocapitalize="none" autocorrect="off" enterkeyhint="go" spellcheck="false" required>
+          <input class="field" type="url" id="url-b" name="urlB" aria-label="Second target URL to compare" placeholder="https://competitor-site.com" inputmode="url" autocomplete="url" autocapitalize="none" autocorrect="off" enterkeyhint="go" spellcheck="false" hidden>
           <select class="field field-select" id="draft-type" name="draftType" aria-label="Draft content type" hidden>
             <option value="html">HTML page</option>
             <option value="llms.txt">llms.txt</option>
             <option value="robots.txt">robots.txt</option>
             <option value="json">JSON manifest (.well-known)</option>
           </select>
-          <textarea class="field field-textarea" id="draft-input" name="draft" aria-label="Draft content to audit" placeholder="Paste raw HTML, robots.txt, llms.txt, or JSON manifest..." rows="6" spellcheck="false" hidden></textarea>
+          <textarea class="field field-textarea" id="draft-input" name="draft" aria-label="Draft content to audit" placeholder="Paste raw HTML, robots.txt, llms.txt, or JSON manifest..." rows="6" autocapitalize="none" autocorrect="off" spellcheck="false" hidden></textarea>
           <button class="btn-primary" id="go" type="submit"><span id="go-label">Run Audit</span></button>
         </form>
         <div class="presets">
@@ -126,11 +127,11 @@
             <span class="score-big num">88/100</span>
           </div>
           <div class="pillar-list">
-            <div class="pillar-item"><span>1. Crawler Access</span><div class="meter" role="meter" aria-valuenow="20" aria-valuemin="0" aria-valuemax="20"><span style="width:100%"></span></div><span class="num">20/20</span></div>
-            <div class="pillar-item"><span>2. llms.txt</span><div class="meter" role="meter" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
-            <div class="pillar-item"><span>3. Structured Context</span><div class="meter" role="meter" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
-            <div class="pillar-item"><span>4. Semantic DOM</span><div class="meter" role="meter" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
-            <div class="pillar-item"><span>5. Protocol Discovery</span><div class="meter" role="meter" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
+            <div class="pillar-item"><span>1. Crawler Access</span><div class="meter" role="meter" aria-label="Crawler Access score" aria-valuenow="20" aria-valuemin="0" aria-valuemax="20"><span style="width:100%"></span></div><span class="num">20/20</span></div>
+            <div class="pillar-item"><span>2. llms.txt</span><div class="meter" role="meter" aria-label="llms.txt score" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
+            <div class="pillar-item"><span>3. Structured Context</span><div class="meter" role="meter" aria-label="Structured Context score" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
+            <div class="pillar-item"><span>4. Semantic DOM</span><div class="meter" role="meter" aria-label="Semantic DOM score" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
+            <div class="pillar-item"><span>5. Protocol Discovery</span><div class="meter" role="meter" aria-label="Protocol Discovery score" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
           </div>
         </div>
       </div>
@@ -203,8 +204,8 @@ npx @akashpriyadarshii/agentprobe init</pre>
 <dialog id="cmdk-modal" class="cmdk-modal" aria-label="Command palette">
   <div class="cmdk-panel">
     <div class="cmdk-head">
-      <input class="cmdk-input" id="cmdk-input" type="search" placeholder="Type a command or jump to..." aria-label="Search commands" autocomplete="off" spellcheck="false">
-      <kbd class="cmdk-esc">Esc</kbd>
+      <input class="cmdk-input" id="cmdk-input" type="search" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-controls="cmdk-list" placeholder="Type a command or jump to..." aria-label="Search commands" autocomplete="off" autocapitalize="none" autocorrect="off" enterkeyhint="search" spellcheck="false">
+      <button class="cmdk-close" id="cmdk-close" type="button" aria-label="Close command palette">Esc</button>
     </div>
     <div class="cmdk-list" id="cmdk-list" role="listbox" aria-label="Commands"></div>
     <div class="cmdk-foot">
