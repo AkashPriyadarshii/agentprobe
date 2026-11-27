@@ -6,13 +6,19 @@
 <title>Documentation — agentprobe Agent Readiness CLI</title>
 <meta name="description" content="agentprobe reference: install, run, score model, the five audit pillars, CLI flags, CI gate, Node API and llms.txt scaffolding.">
 <meta name="author" content="Akash Priyadarshi">
-<meta name="theme-color" content="#09090b">
+<meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
 <link rel="canonical" href="https://agentprobe-self.vercel.app/docs">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://agentprobe-self.vercel.app/docs">
 <meta property="og:title" content="agentprobe docs - every flag, check and score rule">
 <meta property="og:description" content="Install, run, the 100-point score model, the five audit pillars, CLI flags, the GitHub Action, the Node API and llms.txt scaffolding.">
-<meta property="og:image" content="https://agentprobe-self.vercel.app/assets/agentprobe.svg">
+<meta property="og:image" content="https://agentprobe-self.vercel.app/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="agentprobe — The Lighthouse for AI Agents">
+  <meta name="twitter:image" content="https://agentprobe-self.vercel.app/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@Akash__ydv001">
 <meta name="twitter:title" content="agentprobe docs - every flag, check and score rule">
@@ -33,10 +39,13 @@
 }
 </script>
 <link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
+  <script>(function(){try{var t=localStorage.getItem("ap-theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}else if(window.matchMedia("(prefers-color-scheme: light)").matches){document.documentElement.setAttribute("data-theme","light");}}catch(e){}})();</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -50,7 +59,7 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="/docs" aria-current="page">Docs</a>
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.npmjs.com/package/agentprobe" target="_blank" rel="noopener">npm</a>
+      <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
         <svg class="icon-sun" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
@@ -75,7 +84,7 @@
     <h2 id="install">Install &amp; Quickstart</h2>
     <div class="code-block">
       <div class="code-head"><span>shell</span><button class="btn-copy" type="button" data-copy-from="#doc-install" data-copy-label="Command">Copy</button></div>
-      <pre class="code" id="doc-install">npx agentprobe https://your-site.com</pre>
+      <pre class="code" id="doc-install">npx @akashpriyadarshii/agentprobe https://your-site.com</pre>
     </div>
 
     <h2 id="pillars">5 Audit Pillars (100 Points)</h2>
@@ -97,7 +106,7 @@
       <table>
         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td><code>--min-score &lt;n&gt;</code></td><td><code>0</code></td><td>Exit non-zero if total score is below <code>n</code></td></tr>
+          <tr><td><code>--min-score &lt;n&gt;</code></td><td><code>80</code></td><td>Exit non-zero if total score is below <code>n</code></td></tr>
           <tr><td><code>--json</code></td><td><code>false</code></td><td>Output machine-readable JSON report</td></tr>
           <tr><td><code>--timeout &lt;ms&gt;</code></td><td><code>10000</code></td><td>Request timeout per endpoint</td></tr>
         </tbody>
@@ -107,15 +116,15 @@
     <h2 id="ci">CI Gate</h2>
     <div class="code-block">
       <div class="code-head"><span>.github/workflows/agentprobe.yml</span><button class="btn-copy" type="button" data-copy-from="#doc-ci" data-copy-label="Workflow">Copy</button></div>
-      <pre class="code" id="doc-ci">- run: npx agentprobe https://your-site.com --min-score 85</pre>
+      <pre class="code" id="doc-ci">- run: npx @akashpriyadarshii/agentprobe https://your-site.com --min-score 85</pre>
     </div>
 
     <h2 id="api">Node API</h2>
     <div class="code-block">
       <div class="code-head"><span>index.mjs</span><button class="btn-copy" type="button" data-copy-from="#doc-api" data-copy-label="Snippet">Copy</button></div>
-      <pre class="code" id="doc-api">import { audit } from 'agentprobe';
-const report = await audit('https://your-site.com');
-console.log(report.score);</pre>
+      <pre class="code" id="doc-api">import { auditTarget } from '@akashpriyadarshii/agentprobe';
+const report = await auditTarget('https://your-site.com');
+console.log(report.totalScore);</pre>
     </div>
   </main>
 </div>

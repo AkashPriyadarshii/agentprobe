@@ -8,7 +8,7 @@ Keywords: agentic web, agent readiness, lighthouse for ai agents, llms.txt, robo
 
 <div align="center">
 
-  <img src="assets/agentprobe.svg" width="96" alt="agentprobe logo" />
+  <img src="public/assets/agentprobe.svg" width="96" height="96" alt="agentprobe logo" />
 
   <h1><code>agentprobe</code></h1>
 
@@ -192,7 +192,7 @@ jobs:
 Or via direct script:
 
 ```bash
-npx agentprobe ./dist --min-score 80 --json > agent-report.json
+npx @akashpriyadarshii/agentprobe ./dist --min-score 80 --json > agent-report.json
 ```
 
 ---
