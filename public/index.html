@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>agentprobe - agent readiness audit</title>
-<meta name="description" content="Audit a site against five agent-readiness checks: crawler access, llms.txt, structured context, actionability and protocol discovery. Open source, MIT, 100 points, fix list, CI gate.">
+<meta name="description" content="Audit a site against five agent-readiness checks: crawler access, llms.txt, structured context, actionability, and protocol discovery. Open source MIT CLI.">
 <meta name="author" content="Akash Priyadarshi">
 <meta name="theme-color" content="#ece8dc" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#14150f" media="(prefers-color-scheme: dark)">
@@ -28,7 +28,7 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
+  "@type": ["SoftwareApplication", "SoftwareSourceCode"],
   "name": "agentprobe",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Any",
@@ -69,7 +69,7 @@
 
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <h1 id="hero-title">Agent<br>readiness<br>audit<span class="stop">.</span></h1>
+        <h1 id="hero-title">Agent <br>readiness <br>audit<span class="stop">.</span></h1>
         <p class="lede">agentprobe fetches a page the way an autonomous client does: robots.txt, llms.txt, JSON-LD, markdown negotiation, discovery manifests. Five checks, 100 points, one fix list.</p>
 
         <div class="cmd">
@@ -140,7 +140,7 @@
         <form class="audit-form" id="audit-form" novalidate style="margin-top:1.2rem">
           <label class="skip" for="url">Website URL</label>
           <div class="form-row">
-            <input class="field" type="url" id="url" name="url" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
+            <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
             <button class="btn btn-red" type="submit" id="go"><span id="go-label">Run audit</span></button>
           </div>
         </form>

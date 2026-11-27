@@ -45,5 +45,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
 
 Sitemap: https://agentprobe-self.vercel.app/sitemap.xml
