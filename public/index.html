@@ -68,6 +68,10 @@
       <a href="/docs">Docs</a>
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
+      <button class="cmdk-trigger" id="cmdk-trigger" type="button" aria-label="Open command palette" aria-haspopup="dialog" aria-controls="cmdk-modal" title="Command palette (⌘K)">
+        <span class="cmdk-trigger-label">Search</span>
+        <kbd>⌘K</kbd>
+      </button>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
         <svg class="icon-sun" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="icon-moon" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
@@ -92,8 +96,21 @@
           <span>agentprobe &middot; /api/audit</span>
           <span>100-pt scale</span>
         </div>
+        <div class="mode-tabs" role="tablist" aria-label="Audit mode">
+          <button class="mode-tab is-active" type="button" role="tab" aria-selected="true" data-mode="url">Live URL</button>
+          <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="draft">Paste Draft</button>
+          <button class="mode-tab" type="button" role="tab" aria-selected="false" data-mode="compare">Compare</button>
+        </div>
         <form id="audit-form" class="runner-form" novalidate>
           <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
+          <input class="field" type="url" id="url-b" name="urlB" aria-label="Second target URL to compare" placeholder="https://competitor-site.com" inputmode="url" autocomplete="url" spellcheck="false" hidden>
+          <select class="field field-select" id="draft-type" name="draftType" aria-label="Draft content type" hidden>
+            <option value="html">HTML page</option>
+            <option value="llms.txt">llms.txt</option>
+            <option value="robots.txt">robots.txt</option>
+            <option value="json">JSON manifest (.well-known)</option>
+          </select>
+          <textarea class="field field-textarea" id="draft-input" name="draft" aria-label="Draft content to audit" placeholder="Paste raw HTML, robots.txt, llms.txt, or JSON manifest..." rows="6" spellcheck="false" hidden></textarea>
           <button class="btn-primary" id="go" type="submit"><span id="go-label">Run Audit</span></button>
         </form>
         <div class="presets">
@@ -102,6 +119,7 @@
           <button class="preset" type="button" data-preset="https://jevseo.vercel.app">jev-seo</button>
           <button class="preset" type="button" data-preset="https://tdlib-android.vercel.app">tdlib-android</button>
         </div>
+        <div id="history-bar" class="history-bar" aria-label="Recent audits"></div>
         <div id="out" class="runner-out" aria-live="polite">
           <div class="score-row">
             <span>Sample: <strong>agentprobe-self.vercel.app</strong> &mdash; enter a URL above to run a live audit.</span>
@@ -181,6 +199,21 @@ npx @akashpriyadarshii/agentprobe init</pre>
     </div>
   </div>
 </footer>
+
+<dialog id="cmdk-modal" class="cmdk-modal" aria-label="Command palette">
+  <div class="cmdk-panel">
+    <div class="cmdk-head">
+      <input class="cmdk-input" id="cmdk-input" type="search" placeholder="Type a command or jump to..." aria-label="Search commands" autocomplete="off" spellcheck="false">
+      <kbd class="cmdk-esc">Esc</kbd>
+    </div>
+    <div class="cmdk-list" id="cmdk-list" role="listbox" aria-label="Commands"></div>
+    <div class="cmdk-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>↵</kbd> select</span>
+      <span><kbd>Esc</kbd> close</span>
+    </div>
+  </div>
+</dialog>
 
 <script src="/assets/site.js" defer></script>
 </body>
