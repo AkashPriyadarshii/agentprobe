@@ -1,30 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>agentprobe - agent readiness audit</title>
+<title>agentprobe — The Lighthouse for AI Agents</title>
 <meta name="description" content="Audit a site against five agent-readiness checks: crawler access, llms.txt, structured context, actionability, and protocol discovery. Open source MIT CLI.">
 <meta name="author" content="Akash Priyadarshi">
-<meta name="theme-color" content="#ece8dc" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14150f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#09090b">
 <link rel="canonical" href="https://agentprobe-self.vercel.app/">
-<link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,300..600&display=swap">
-<link rel="stylesheet" href="/assets/site.css">
-
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://agentprobe-self.vercel.app/">
-<meta property="og:title" content="agentprobe - agent readiness audit">
-<meta property="og:description" content="Five checks that decide whether AI agents can crawl, read and act on your site. 100 points, one fix list, a CI gate.">
+<meta property="og:title" content="agentprobe — The Lighthouse for AI Agents">
+<meta property="og:description" content="Audit any URL against five agent-readiness pillars: crawler access, llms.txt, structured context, actionability, and protocol discovery.">
 <meta property="og:image" content="https://agentprobe-self.vercel.app/assets/agentprobe.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@Akash__ydv001">
-<meta name="twitter:title" content="agentprobe - agent readiness audit">
-<meta name="twitter:description" content="Open-source audit for agentic web readiness: robots.txt, llms.txt, JSON-LD, actionability, discovery manifests.">
-
+<meta name="twitter:title" content="agentprobe — The Lighthouse for AI Agents">
+<meta name="twitter:description" content="Audit any URL against five agent-readiness pillars. Open source MIT CLI and CI gate.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -41,252 +33,144 @@
   "description": "Open-source audit for agentic web readiness. Scores crawler access, llms.txt, structured context, actionability and protocol discovery from 0 to 100."
 }
 </script>
+<link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script>
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('ap-theme'); } catch (e) {}
+  var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="masthead">
-  <div class="wrap masthead-inner">
+  <div class="container nav-inner">
     <a class="brand" href="/">
-      <img src="/assets/agentprobe.svg" alt="" width="22" height="22">
       <span>agentprobe</span>
-      <span class="brand-mark">audit sheet</span>
+      <span class="brand-badge">v0.0.2</span>
     </a>
-    <nav class="nav" aria-label="Primary">
-      <a href="#method">Method</a>
+    <nav class="nav-links" aria-label="Primary">
       <a href="/docs">Docs</a>
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/agentprobe" target="_blank" rel="noopener">npm</a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <svg class="icon-sun" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </nav>
   </div>
 </header>
 
 <main id="main">
-  <div class="wrap">
+  <section class="hero">
+    <div class="container">
+      <h1 id="hero-title">The Lighthouse for AI Agents</h1>
+      <p class="hero-sub">Score any URL from 0 to 100 across five agent-readiness pillars: crawler access, <code>llms.txt</code>, structured context, semantic DOM, and protocol discovery.</p>
 
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <h1 id="hero-title">Agent <br>readiness <br>audit<span class="stop">.</span></h1>
-        <p class="lede">agentprobe fetches a page the way an autonomous client does: robots.txt, llms.txt, JSON-LD, markdown negotiation, discovery manifests. Five checks, 100 points, one fix list.</p>
-
-        <div class="cmd">
-          <code id="install-cmd">npx @akashpriyadarshii/agentprobe https://your-site.com</code>
-          <button class="btn btn-sm" type="button" data-copy-from="#install-cmd" data-copy-label="Command">Copy</button>
-        </div>
+      <div class="install-pill">
+        <span id="install-cmd">npx agentprobe https://your-site.com</span>
+        <button class="btn-copy" type="button" data-copy-from="#install-cmd" data-copy-label="Command">Copy</button>
       </div>
 
-      <div class="hero-sheet">
-        <article class="sheet" aria-label="Specimen audit of example.com">
-          <header class="sheet-head">
-            <span>Specimen</span>
-            <span class="target">https://example.com</span>
-            <span class="gate is-fail">Gate failed</span>
-          </header>
-
-          <div class="sheet-score">
-            <p class="figure">34<small>/100</small></p>
-            <p class="grade" data-band="bad">F</p>
-            <p class="score-meta">4 passed<br>7 failed<br>8 warnings<br>817 ms</p>
-          </div>
-
-          <div class="ruler" aria-hidden="true">
-            <div class="ruler-track"><span class="needle" style="left:34%"></span></div>
-            <div class="ruler-scale"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
-          </div>
-
-          <div class="sheet-rows">
-            <div class="pillar-row">
-              <span class="name">Crawler access</span>
-              <span class="meter" style="--v:65%" data-band="mid"></span>
-              <span class="pts">13/20</span>
-            </div>
-            <div class="pillar-row">
-              <span class="name">LLM manifest</span>
-              <span class="meter" style="--v:5%" data-band="bad"></span>
-              <span class="pts">1/20</span>
-            </div>
-            <div class="pillar-row">
-              <span class="name">Structured context</span>
-              <span class="meter" style="--v:5%" data-band="bad"></span>
-              <span class="pts">1/20</span>
-            </div>
-            <div class="pillar-row">
-              <span class="name">Actionability</span>
-              <span class="meter" style="--v:60%" data-band="mid"></span>
-              <span class="pts">12/20</span>
-            </div>
-            <div class="pillar-row">
-              <span class="name">Protocol discovery</span>
-              <span class="meter" style="--v:35%" data-band="bad"></span>
-              <span class="pts">7/20</span>
-            </div>
-          </div>
-        </article>
-        <p class="specimen-note">Printed from a real run against example.com, not a mockup. Your site will score differently.</p>
-      </div>
-    </section>
-
-    <section class="rail-row" id="audit" aria-labelledby="audit-title">
-      <p class="rail">Live audit<br>public urls only</p>
-      <div class="body">
-        <div class="section-h">
-          <h2 id="audit-title">Score your own page.</h2>
-          <p>The same five engines run here. Paste a public URL, get the sheet, read the failures.</p>
+      <div class="runner-card">
+        <div class="runner-bar">
+          <span>agentprobe &middot; /api/audit</span>
+          <span>100-pt scale</span>
         </div>
-
-        <form class="audit-form" id="audit-form" novalidate style="margin-top:1.2rem">
-          <label class="skip" for="url">Website URL</label>
-          <div class="form-row">
-            <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
-            <button class="btn btn-red" type="submit" id="go"><span id="go-label">Run audit</span></button>
-          </div>
+        <form id="audit-form" class="runner-form" novalidate>
+          <input class="field" type="url" id="url" name="url" aria-label="Target URL to audit" placeholder="https://your-site.com" inputmode="url" autocomplete="url" spellcheck="false" required>
+          <button class="btn-primary" id="go" type="submit"><span id="go-label">Run Audit</span></button>
         </form>
-
         <div class="presets">
-          <span class="micro">Try</span>
-          <button class="preset" type="button" data-preset="https://akashpriyadarshi.is-a.dev">akashpriyadarshi.is-a.dev</button>
-          <button class="preset" type="button" data-preset="https://docs.anthropic.com">docs.anthropic.com</button>
-          <button class="preset" type="button" data-preset="https://github.com">github.com</button>
-          <button class="preset" type="button" data-preset="https://news.ycombinator.com">news.ycombinator.com</button>
+          <span>Try:</span>
+          <button class="preset" type="button" data-preset="https://agentprobe-self.vercel.app">agentprobe</button>
+          <button class="preset" type="button" data-preset="https://jevseo.vercel.app">jev-seo</button>
+          <button class="preset" type="button" data-preset="https://tdlib-android.vercel.app">tdlib-android</button>
         </div>
-
-        <p class="audit-note">Public http and https only. Localhost, private ranges and .internal are blocked before any fetch. A strict WAF can refuse the request; run the CLI from your machine when it does.</p>
-
-        <div id="out" aria-live="polite" style="margin-top:1.4rem"></div>
-      </div>
-    </section>
-
-    <section class="rail-row" id="method" aria-labelledby="method-title">
-      <p class="rail">Method<br>100 points</p>
-      <div class="body">
-        <div class="section-h">
-          <h2 id="method-title">Five checks, twenty points each.</h2>
-          <p>Every check carries a weight. A failure deducts the full weight, a warning deducts half, and each deduction carries the fix that clears it. Nothing in the scorer is random, so the same build returns the same score.</p>
-        </div>
-
-        <div class="legend">
-          <div>
-            <span class="lname">Crawler access</span>
-            <span class="ldesc">robots.txt rules for 15 AI user agents, plus the sitemap declaration.</span>
-            <span class="lmeta">3 checks</span>
+        <div id="out" class="runner-out" aria-live="polite">
+          <div class="score-row">
+            <span>Sample: <strong>agentprobe-self.vercel.app</strong> &mdash; enter a URL above to run a live audit.</span>
+            <span class="score-big num">88/100</span>
           </div>
-          <div>
-            <span class="lname">LLM manifest</span>
-            <span class="ldesc">llms.txt and llms-full.txt against the spec: H1, summary, sections, token budget.</span>
-            <span class="lmeta">4 checks</span>
-          </div>
-          <div>
-            <span class="lname">Structured context</span>
-            <span class="ldesc">JSON-LD, main and nav landmarks, one H1, ordered headings, description.</span>
-            <span class="lmeta">4 checks</span>
-          </div>
-          <div>
-            <span class="lname">Actionability</span>
-            <span class="ldesc">Markdown negotiation, accessible names on controls, content present before hydration.</span>
-            <span class="lmeta">4 checks</span>
-          </div>
-          <div>
-            <span class="lname">Protocol discovery</span>
-            <span class="ldesc">ai-catalog.json, mcp.json, a skills index, x402 payment headers.</span>
-            <span class="lmeta">4 checks</span>
-          </div>
-        </div>
-
-        <p class="grades">Grades: 95+ A+ / 85 A / 75 B / 60 C / 40 D / below 40 F</p>
-      </div>
-    </section>
-
-    <section class="rail-row" id="run" aria-labelledby="run-title">
-      <p class="rail">Run it<br>terminal and ci</p>
-      <div class="body">
-        <div class="section-h">
-          <h2 id="run-title">One engine, three surfaces.</h2>
-          <p>The hosted audit, the CLI and the GitHub Action call the same five engines. Point the CLI at a preview URL or at the folder you are about to deploy.</p>
-        </div>
-
-        <div class="run-grid">
-          <div>
-            <span class="run-label">Terminal</span>
-            <pre class="print"><code><span class="p">$</span> npx @akashpriyadarshii/agentprobe https://example.com
-
-  Target:      https://example.com/
-  Gate Status: <span class="bad">FAILED</span>  F   (min score: 80)
-
-  TOTAL READINESS SCORE: 34 / 100   F
-
-  1. Bot Accessibility      13/20
-  2. LLM Manifest            1/20
-  3. Structured Context      1/20
-  4. Actionability          12/20
-  5. Protocol Discovery      7/20</code></pre>
-            <p class="audit-note" style="margin-top:.6rem">Trimmed output from the example.com run above. Each check below the summary prints its own fix.</p>
-          </div>
-
-          <div>
-            <span class="run-label">GitHub Actions</span>
-            <pre class="print"><code>name: Agent readiness
-on: [push, pull_request]
-
-jobs:
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: AkashPriyadarshii/agentprobe@v1
-        with:
-          target: 'https://preview.your-site.com'
-          min-score: '85'</code></pre>
-            <div class="exit-list">
-              <div><span>0</span><span>score meets the threshold</span></div>
-              <div><span>1</span><span>score below the threshold, job fails</span></div>
-              <div><span>2</span><span>invalid target, unreachable host, parse error</span></div>
-            </div>
+          <div class="pillar-list">
+            <div class="pillar-item"><span>1. Crawler Access</span><div class="meter" role="meter" aria-valuenow="20" aria-valuemin="0" aria-valuemax="20"><span style="width:100%"></span></div><span class="num">20/20</span></div>
+            <div class="pillar-item"><span>2. llms.txt</span><div class="meter" role="meter" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
+            <div class="pillar-item"><span>3. Structured Context</span><div class="meter" role="meter" aria-valuenow="18" aria-valuemin="0" aria-valuemax="20"><span style="width:90%"></span></div><span class="num">18/20</span></div>
+            <div class="pillar-item"><span>4. Semantic DOM</span><div class="meter" role="meter" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
+            <div class="pillar-item"><span>5. Protocol Discovery</span><div class="meter" role="meter" aria-valuenow="16" aria-valuemin="0" aria-valuemax="20"><span style="width:80%"></span></div><span class="num">16/20</span></div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="rail-row" id="limits" aria-labelledby="limits-title">
-      <p class="rail">Limits</p>
-      <div class="body">
-        <h2 id="limits-title">What it does not do.</h2>
-        <dl class="limits">
-          <div>
-            <dt>No JavaScript</dt>
-            <dd>The scorer reads server HTML. A client-rendered page with an empty document fails the actionability checks, because an agent that does not run JavaScript sees the same empty document.</dd>
-          </div>
-          <div>
-            <dt>No private targets</dt>
-            <dd>The hosted endpoint refuses localhost, private ranges and .internal hosts. Run <code>agentprobe ./dist</code> for anything that is not public yet.</dd>
-          </div>
-          <div>
-            <dt>No stored reports</dt>
-            <dd>The endpoint fetches, scores and returns. There is no account and no database. Responses are cached at the edge for five minutes.</dd>
-          </div>
-          <div>
-            <dt>No guesswork</dt>
-            <dd>A strict WAF can block a server-side fetch. When that happens the audit reports the error instead of inventing a score.</dd>
-          </div>
-        </dl>
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">5 Pillars &middot; 20 pts each</div>
+        <h2>What agentprobe measures</h2>
+        <p>Every check maps directly to how AI search engines, coding agents, and headless browsers discover, parse, and act on your site.</p>
       </div>
-    </section>
+      <div class="bento">
+        <article class="card">
+          <div class="card-top"><h3>Crawler Access</h3><span class="card-tag">01</span></div>
+          <p>Verifies <code>robots.txt</code> reachability, explicit AI crawler rules (<code>GPTBot</code>, <code>ClaudeBot</code>, <code>PerplexityBot</code>), and <code>Content-Signal</code> directives.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>llms.txt</h3><span class="card-tag">02</span></div>
+          <p>Validates <code>/llms.txt</code> structure: H1 title, blockquote summary, and Markdown <code>[Title](url)</code> links per llmstxt.org.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Structured Context</h3><span class="card-tag">03</span></div>
+          <p>Checks JSON-LD Schema.org blocks, canonical URLs, Open Graph tags, and clean server-rendered HTML.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Semantic DOM &amp; ARIA</h3><span class="card-tag">04</span></div>
+          <p>Audits landmarks, real <code>&lt;button&gt;</code> and <code>&lt;a&gt;</code> controls, and accessible labels on form inputs.</p>
+        </article>
+        <article class="card">
+          <div class="card-top"><h3>Protocol Discovery</h3><span class="card-tag">05</span></div>
+          <p>Inspects <code>.well-known/ai-catalog.json</code>, <code>.well-known/mcp.json</code>, and Markdown content negotiation.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-  </div>
+  <section class="section">
+    <div class="container">
+      <div class="sec-head">
+        <div class="sec-eyebrow">CLI &amp; CI Gate</div>
+        <h2>Built for local runs and GitHub Actions</h2>
+        <p>Fail builds when agent readiness drops below your threshold, or scaffold missing <code>llms.txt</code> files in one command.</p>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>terminal &amp; github-actions</span>
+          <button class="btn-copy" type="button" data-copy-from="#cli-example" data-copy-label="CLI snippet">Copy</button>
+        </div>
+        <pre class="code" id="cli-example">npx agentprobe https://your-site.com --min-score 85 --json
+npx agentprobe init --llms-txt</pre>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="footer">
-  <div class="wrap footer-inner">
-    <p>MIT licensed. Built by <a href="https://akashpriyadarshi.is-a.dev" target="_blank" rel="noopener">Akash Priyadarshi</a>.</p>
-    <nav class="footer-links" aria-label="Elsewhere">
+  <div class="container footer-inner">
+    <div>MIT Licensed &middot; Built by <a href="https://akashpriyadarshi.is-a.dev" target="_blank" rel="noopener">Akash Priyadarshi</a></div>
+    <div class="footer-links">
       <a href="/docs">Docs</a>
+      <a href="/llms.txt">llms.txt</a>
+      <a href="/sitemap.xml">Sitemap</a>
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
-      <a href="https://linkedin.com/in/akashpriyadarshii" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://x.com/Akash__ydv001" target="_blank" rel="noopener">X</a>
-    </nav>
+    </div>
   </div>
 </footer>
 

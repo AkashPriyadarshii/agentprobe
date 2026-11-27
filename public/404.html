@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>404 — Page Not Found | agentprobe</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script>
+(function () {
+  var stored = null;
+  try { stored = localStorage.getItem('ap-theme'); } catch (e) {}
+  var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
+</head>
+<body>
+<main class="hero" style="min-height:80dvh;display:flex;align-items:center">
+  <div class="container">
+    <p class="sec-eyebrow">404 &middot; Not Found</p>
+    <h1>Page not found</h1>
+    <p class="hero-sub">The requested route does not exist on agentprobe.</p>
+    <a class="btn-primary" style="display:inline-flex" href="/">Back to agentprobe</a>
+  </div>
+</main>
+</body>
+</html>

@@ -228,7 +228,7 @@
           '<span class="micro">' + report.summary.totalChecks + ' checks / ' + fixes.length + ' fixes / min ' + report.minScoreThreshold + '</span>' +
           '<span class="group">' +
             '<button class="btn btn-sm" type="button" data-copy-from="#raw-json" data-copy-label="Report JSON">Copy JSON</button>' +
-            '<a class="btn btn-sm" href="/docs#score">How scoring works</a>' +
+            '<a class="btn btn-sm" href="/docs#pillars">How scoring works</a>' +
           '</span>' +
         '</div>' +
         '<div class="checks">' + renderChecks(report.pillars) + '</div>' +
@@ -259,7 +259,9 @@
     const stopTicker = renderRunning(target);
 
     try {
-      const response = await fetch('/api/audit?url=' + encodeURIComponent(target));
+      const response = await fetch('/api/audit?url=' + encodeURIComponent(target), {
+        signal: AbortSignal.timeout(25000)
+      });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(payload.error || 'HTTP ' + response.status);
       renderReport(payload);

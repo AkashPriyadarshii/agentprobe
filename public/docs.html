@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Documentation — agentprobe Agent Readiness CLI</title>
 <meta name="description" content="agentprobe reference: install, run, score model, the five audit pillars, CLI flags, CI gate, Node API and llms.txt scaffolding.">
 <meta name="author" content="Akash Priyadarshi">
-<meta name="theme-color" content="#ece8dc" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14150f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#09090b">
 <link rel="canonical" href="https://agentprobe-self.vercel.app/docs">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://agentprobe-self.vercel.app/docs">
@@ -36,239 +35,99 @@
 <link rel="icon" type="image/svg+xml" href="/assets/agentprobe.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,300..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
-<script>
-(function () {
-  var stored = null;
-  try { stored = localStorage.getItem('ap-theme'); } catch (e) {}
-  var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', theme);
-})();
-</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="masthead">
-  <div class="wrap masthead-inner">
+  <div class="container nav-inner">
     <a class="brand" href="/">
-      <img src="/assets/agentprobe.svg" alt="" width="22" height="22">
       <span>agentprobe</span>
-      <span class="brand-mark">reference</span>
+      <span class="brand-badge">v0.0.2</span>
     </a>
-    <nav class="nav" aria-label="Primary">
-      <a href="/#method">Method</a>
+    <nav class="nav-links" aria-label="Primary">
       <a href="/docs" aria-current="page">Docs</a>
       <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/agentprobe" target="_blank" rel="noopener">npm</a>
       <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+        <svg class="icon-sun" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <svg class="icon-moon" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
     </nav>
   </div>
 </header>
 
-<main id="main">
-  <div class="wrap">
-    <div class="docs-shell">
-      <nav class="docs-nav" aria-label="Reference">
-        <span class="micro">Reference</span>
-        <ol>
-          <li><a href="#install">01 Install</a></li>
-          <li><a href="#run">02 Run</a></li>
-          <li><a href="#score">03 Score</a></li>
-          <li><a href="#pillars">04 Pillars</a></li>
-          <li><a href="#flags">05 Flags</a></li>
-          <li><a href="#ci">06 CI</a></li>
-          <li><a href="#library">07 Library</a></li>
-          <li><a href="#init">08 Scaffold</a></li>
-          <li><a href="#limits">09 Limits</a></li>
-        </ol>
-      </nav>
+<div class="container docs-layout">
+  <aside class="docs-nav" aria-label="Documentation sections">
+    <a href="#install">Install &amp; Quickstart</a>
+    <a href="#pillars">5 Audit Pillars</a>
+    <a href="#flags">CLI Flags</a>
+    <a href="#ci">CI Gate</a>
+    <a href="#api">Node API</a>
+  </aside>
 
-      <article class="docs-body">
-        <p class="micro">Docs / v0.0.2</p>
-        <h1>Every flag, check and score rule.</h1>
-        <p>agentprobe fetches a page the way an autonomous client does, then scores what it found across five pillars. The CLI, the GitHub Action and the hosted audit all call the same five engines, so a score means the same thing wherever you read it.</p>
+  <main id="main" class="docs-body">
+    <h1>agentprobe Documentation</h1>
+    <p>Every flag, check, and scoring rule in <code>agentprobe</code>.</p>
 
-        <section id="install">
-          <h2>Install</h2>
-          <p>Node 18 or newer. Nothing else to configure.</p>
-          <pre class="print"><span class="p">$</span> npx @akashpriyadarshii/agentprobe https://example.com
-
-<span class="c"># or install it for repeated runs</span>
-<span class="p">$</span> npm install -D @akashpriyadarshii/agentprobe
-<span class="p">$</span> npx agentprobe https://example.com</pre>
-          <p>Pin a version in CI so a scorer change cannot fail a green build without a commit. The package ships ESM and CommonJS builds plus TypeScript types.</p>
-        </section>
-
-        <section id="run">
-          <h2>Run</h2>
-          <p>A target is either a public URL or a directory on disk. A URL is fetched over the network; a directory is read as a built static export, which is the mode that matches what a crawler receives after deployment.</p>
-          <pre class="print"><span class="p">$</span> agentprobe https://example.com
-<span class="p">$</span> agentprobe ./dist
-<span class="p">$</span> agentprobe https://preview.example.com --min-score 90</pre>
-          <p>Default output is the terminal report: score, grade, the five pillars and a fix list. Each failing check prints the reason it failed and the change that clears it.</p>
-          <p>Exit codes are the CI contract.</p>
-          <table class="ledger">
-            <caption>Exit codes</caption>
-            <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
-            <tbody>
-              <tr><td class="num">0</td><td>Score at or above the threshold.</td></tr>
-              <tr><td class="num">1</td><td>Score below the threshold. The job fails.</td></tr>
-              <tr><td class="num">2</td><td>Invalid target, unreachable host, or a parse error.</td></tr>
-            </tbody>
-          </table>
-        </section>
-
-        <section id="score">
-          <h2>Score</h2>
-          <p>Five pillars, twenty points each, one hundred total. Every check carries a weight. A pass keeps the full weight, a warning keeps half, a failure keeps nothing.</p>
-          <p>Nothing in the scorer is random, and no check depends on another. The same build returns the same score, which is what makes a threshold usable as a gate.</p>
-          <table class="ledger">
-            <caption>Pillar weights</caption>
-            <thead><tr><th>Pillar</th><th>Points</th><th>Checks</th></tr></thead>
-            <tbody>
-              <tr><td>Crawler access</td><td class="num">20</td><td class="num">3</td></tr>
-              <tr><td>LLM manifest</td><td class="num">20</td><td class="num">4</td></tr>
-              <tr><td>Structured context</td><td class="num">20</td><td class="num">4</td></tr>
-              <tr><td>Actionability</td><td class="num">20</td><td class="num">4</td></tr>
-              <tr><td>Protocol discovery</td><td class="num">20</td><td class="num">4</td></tr>
-            </tbody>
-          </table>
-          <p>Grades are assigned from the total, not from the pillars.</p>
-          <table class="ledger">
-            <caption>Grades</caption>
-            <thead><tr><th>Score</th><th>Grade</th></tr></thead>
-            <tbody>
-              <tr><td class="num">95 to 100</td><td>A+</td></tr>
-              <tr><td class="num">85 to 94</td><td>A</td></tr>
-              <tr><td class="num">75 to 84</td><td>B</td></tr>
-              <tr><td class="num">60 to 74</td><td>C</td></tr>
-              <tr><td class="num">40 to 59</td><td>D</td></tr>
-              <tr><td class="num">below 40</td><td>F</td></tr>
-            </tbody>
-          </table>
-        </section>
-
-        <section id="pillars">
-          <h2>Pillars</h2>
-
-          <h3>Crawler access, 3 checks</h3>
-          <p>Reads <code>/robots.txt</code> and evaluates it against 15 production AI user agents, including GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, Bytespider, Amazonbot and Applebot-Extended. A disallow rule aimed at a group that covers those agents fails the check. A missing robots.txt is a warning rather than a failure, because the default behavior is to allow.</p>
-
-          <h3>LLM manifest, 4 checks</h3>
-          <p>Checks for <code>/llms.txt</code> and <code>/llms-full.txt</code>, then reads what is inside: an H1, a summary line, sections with links, and a size that stays inside a token budget. A manifest that exists but contains a marketing page costs you the spec-compliance points.</p>
-
-          <h3>Structured context, 4 checks</h3>
-          <p>Parses the HTML for semantic landmarks (<code>main</code>, <code>nav</code>, <code>header</code>, <code>footer</code>), a single H1 with a heading hierarchy under it, a usable <code>&lt;title&gt;</code> and meta description, and Schema.org JSON-LD that names the entity and the page type.</p>
-
-          <h3>Actionability, 4 checks</h3>
-          <p>Measures whether the fetched document is usable without a browser: server-rendered content in the initial HTML, a Markdown alternative through content negotiation, accessible names on interactive controls, and form fields with labels. A client-rendered page that ships an empty root element fails here, and that failure is usually the largest single deduction.</p>
-
-          <h3>Protocol discovery, 4 checks</h3>
-          <p>Looks for <code>/.well-known/ai-catalog.json</code> (Agentic Resource Discovery), <code>/.well-known/mcp.json</code> (Model Context Protocol server declaration), a skills index, and <code>x402</code> payment headers for paid endpoints. These are early standards, so a missing manifest is a warning, not a failure.</p>
-        </section>
-
-        <section id="flags">
-          <h2>Flags</h2>
-          <table class="ledger">
-            <caption>CLI</caption>
-            <thead><tr><th>Flag</th><th>Behavior</th></tr></thead>
-            <tbody>
-              <tr><td><code>--json</code></td><td>Machine-readable report on stdout, nothing else.</td></tr>
-              <tr><td><code>--plain</code></td><td>Structured plain text for agents and scripts. No ANSI, no box drawing.</td></tr>
-              <tr><td><code>--summary</code></td><td>GitHub Step Summary Markdown.</td></tr>
-              <tr><td><code>--min-score &lt;n&gt;</code></td><td>Pass threshold, default 80.</td></tr>
-              <tr><td><code>--no-color</code></td><td>Disable ANSI colors.</td></tr>
-              <tr><td><code>-q, --quiet</code></td><td>Suppress non-essential output.</td></tr>
-              <tr><td><code>-v, --version</code></td><td>Print the version.</td></tr>
-            </tbody>
-          </table>
-          <p>JSON output is the stable interface. Its shape is the <code>AuditReport</code> type exported from the package, so a dashboard can consume it without parsing the terminal layout.</p>
-        </section>
-
-        <section id="ci">
-          <h2>CI</h2>
-          <p>The action runs after a deploy, audits the preview URL and fails the job when the score drops under the threshold. Keep <code>fail-on-error</code> false for previews that may sit behind a WAF, true for production.</p>
-          <pre class="print">name: agent readiness
-on: [push, pull_request]
-
-jobs:
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: AkashPriyadarshii/agentprobe@v1
-        with:
-          target: https://preview.your-site.com
-          min-score: 80</pre>
-          <p>Without the action, run the CLI directly and let the exit code fail the step:</p>
-          <pre class="print"><span class="p">$</span> npx @akashpriyadarshii/agentprobe ./dist --min-score 85</pre>
-          <p>For a readable job summary, add <code>--summary &gt;&gt; "$GITHUB_STEP_SUMMARY"</code> to the same step.</p>
-        </section>
-
-        <section id="library">
-          <h2>Library</h2>
-          <p>The engines are exported individually, so a build step can run one pillar without fetching the rest.</p>
-          <pre class="print">import { auditTarget } from '@akashpriyadarshii/agentprobe';
-
-const report = await auditTarget('https://example.com', { minScore: 80 });
-
-console.log(report.summary.totalScore, report.summary.grade);
-for (const pillar of report.pillars) {
-  for (const check of pillar.checks) {
-    if (check.status !== 'pass') console.log(pillar.name, check.name, check.recommendation);
-  }
-}</pre>
-          <p>Single-pillar functions: <code>auditCrawlerAccess</code>, <code>auditLLMsTxt</code>, <code>auditSemanticStructure</code>, <code>auditActionability</code>, <code>auditProtocolDiscovery</code>. Report formatters: <code>formatTerminalReport</code>, <code>formatJsonReport</code>, <code>formatPlainReport</code>, <code>formatGitHubStepSummary</code>.</p>
-        </section>
-
-        <section id="init">
-          <h2>Scaffold</h2>
-          <p><code>init</code> writes a starting <code>llms.txt</code> and a permissive <code>robots.txt</code> so the two cheapest checks pass immediately. It never overwrites an existing file. If a <code>public/</code> directory exists it writes there, otherwise to the current directory.</p>
-          <pre class="print"><span class="p">$</span> npx @akashpriyadarshii/agentprobe init --name "Acme" --description "Static site for Acme."
-
-created  /site/public/llms.txt
-created  /site/public/robots.txt</pre>
-          <p>Both files are starting points, not finished manifests. Replace the placeholder links with real ones, or the spec-compliance check will still dock points.</p>
-        </section>
-
-        <section id="limits">
-          <h2>Limits</h2>
-          <p><strong>No JavaScript execution.</strong> The scorer reads server HTML. A client-rendered page with an empty document fails the actionability checks because that is exactly what an agent without a browser receives.</p>
-          <p><strong>No private targets.</strong> The hosted endpoint refuses localhost, private ranges and <code>.internal</code> hosts. Run the CLI locally for anything that is not public.</p>
-          <p><strong>No stored reports.</strong> The hosted audit fetches, scores and returns. There is no account and no database. Responses are cached at the edge for five minutes.</p>
-          <p><strong>No guessing behind a WAF.</strong> When a strict WAF blocks the server-side fetch, the audit reports the error instead of inventing a score.</p>
-        </section>
-      </article>
-
-      <aside class="docs-margin" aria-label="Package facts">
-        <dl>
-          <dt>Version</dt><dd>0.0.2</dd>
-          <dt>License</dt><dd>MIT</dd>
-          <dt>Runtime</dt><dd>Node 18+</dd>
-          <dt>Package</dt><dd>@akashpriyadarshii/agentprobe</dd>
-          <dt>Source</dt><dd><a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">github.com/AkashPriyadarshii/agentprobe</a></dd>
-          <dt>Score</dt><dd>0 to 100, five pillars</dd>
-        </dl>
-        <p class="docs-margin-note">Reports are deterministic. Same build, same score.</p>
-      </aside>
+    <h2 id="install">Install &amp; Quickstart</h2>
+    <div class="code-block">
+      <div class="code-head"><span>shell</span><button class="btn-copy" type="button" data-copy-from="#doc-install" data-copy-label="Command">Copy</button></div>
+      <pre class="code" id="doc-install">npx agentprobe https://your-site.com</pre>
     </div>
-  </div>
-</main>
+
+    <h2 id="pillars">5 Audit Pillars (100 Points)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pillar</th><th>Weight</th><th>What it checks</th></tr></thead>
+        <tbody>
+          <tr><td>Crawler Access</td><td class="num">20 pts</td><td><code>robots.txt</code>, AI bot rules, <code>Content-Signal</code></td></tr>
+          <tr><td>llms.txt</td><td class="num">20 pts</td><td><code>/llms.txt</code> H1, blockquote, Markdown links</td></tr>
+          <tr><td>Structured Context</td><td class="num">20 pts</td><td>JSON-LD, canonicals, OG tags, SSR HTML</td></tr>
+          <tr><td>Semantic DOM</td><td class="num">20 pts</td><td>Landmarks, real buttons/links, ARIA labels</td></tr>
+          <tr><td>Protocol Discovery</td><td class="num">20 pts</td><td><code>.well-known/ai-catalog.json</code>, MCP, Markdown</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="flags">CLI Flags</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--min-score &lt;n&gt;</code></td><td><code>0</code></td><td>Exit non-zero if total score is below <code>n</code></td></tr>
+          <tr><td><code>--json</code></td><td><code>false</code></td><td>Output machine-readable JSON report</td></tr>
+          <tr><td><code>--timeout &lt;ms&gt;</code></td><td><code>10000</code></td><td>Request timeout per endpoint</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="ci">CI Gate</h2>
+    <div class="code-block">
+      <div class="code-head"><span>.github/workflows/agentprobe.yml</span><button class="btn-copy" type="button" data-copy-from="#doc-ci" data-copy-label="Workflow">Copy</button></div>
+      <pre class="code" id="doc-ci">- run: npx agentprobe https://your-site.com --min-score 85</pre>
+    </div>
+
+    <h2 id="api">Node API</h2>
+    <div class="code-block">
+      <div class="code-head"><span>index.mjs</span><button class="btn-copy" type="button" data-copy-from="#doc-api" data-copy-label="Snippet">Copy</button></div>
+      <pre class="code" id="doc-api">import { audit } from 'agentprobe';
+const report = await audit('https://your-site.com');
+console.log(report.score);</pre>
+    </div>
+  </main>
+</div>
 
 <footer class="footer">
-  <div class="wrap footer-inner">
-    <p>MIT licensed. Built by <a href="https://akashpriyadarshi.is-a.dev" target="_blank" rel="noopener">Akash Priyadarshi</a>.</p>
-    <nav class="footer-links" aria-label="Elsewhere">
-      <a href="/docs">Docs</a>
-      <a href="https://github.com/AkashPriyadarshii/agentprobe" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.npmjs.com/package/@akashpriyadarshii/agentprobe" target="_blank" rel="noopener">npm</a>
-      <a href="https://linkedin.com/in/akashpriyadarshii" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://x.com/Akash__ydv001" target="_blank" rel="noopener">X</a>
-    </nav>
+  <div class="container footer-inner">
+    <div>MIT Licensed &middot; Built by <a href="https://akashpriyadarshi.is-a.dev" target="_blank" rel="noopener">Akash Priyadarshi</a></div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/llms.txt">llms.txt</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
   </div>
 </footer>
 
