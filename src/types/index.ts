@@ -42,6 +42,8 @@ export interface AuditReport {
     totalChecks: number;
   };
   quickFixes: string[];
+  maturityLevel?: 'L0' | 'L1' | 'L2' | 'L3' | 'L4' | 'L5';
+  schemaVersion?: string;
 }
 
 export interface AuditOptions {
@@ -52,4 +54,8 @@ export interface AuditOptions {
   quiet?: boolean;
   noColor?: boolean;
   fix?: boolean;
+  format?: string;
+  output?: string;
+  profile?: string;
+  headers?: Record<string, string>;
 }

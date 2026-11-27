@@ -5,12 +5,25 @@ export interface LLMsTxtAuditInput {
   llmsTxtContent?: string;
   statusCode?: number;
   fullStatusCode?: number;
+  contentType?: string;
+  fullContentType?: string;
 }
 
 export function estimateTokenCount(text: string): number {
   if (!text) return 0;
   // Standard rule of thumb: ~4 characters per token for English text/markdown
   return Math.ceil(text.length / 4);
+}
+
+export function isValidLlmsContentType(contentType?: string): boolean {
+  if (contentType === undefined) return true;
+  const mime = contentType.split(';')[0].trim().toLowerCase();
+  return mime === 'text/plain' || mime === 'text/markdown';
+}
+
+function looksLikeHtmlDocument(content?: string): boolean {
+  if (!content) return false;
+  return /^\s*(?:<!doctype\s+html|<html[\s>]|<head[\s>]|<body[\s>])/i.test(content);
 }
 
 export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResult> {
@@ -21,15 +34,18 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
 
   let content = input.llmsTxtContent;
   let status = input.statusCode;
+  let contentType = input.contentType;
   let fullStatus = input.fullStatusCode;
+  let fullContentType = input.fullContentType;
 
-  if (content === undefined) {
+  if (content === undefined && status === undefined) {
     try {
       const res = await fetch(llmsUrl, {
         headers: { 'User-Agent': 'agentprobe/0.0.2' },
         signal: AbortSignal.timeout(5000),
       });
       status = res.status;
+      contentType = res.headers.get('content-type') ?? '';
       if (res.ok) {
         content = await res.text();
       }
@@ -40,19 +56,36 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
 
   if (fullStatus === undefined) {
     try {
-      const resFull = await fetch(llmsFullUrl, {
+      let resFull = await fetch(llmsFullUrl, {
         method: 'HEAD',
         headers: { 'User-Agent': 'agentprobe/0.0.2' },
         signal: AbortSignal.timeout(4000),
       });
+      if (resFull.status === 405) {
+        resFull = await fetch(llmsFullUrl, {
+          method: 'GET',
+          headers: { 'User-Agent': 'agentprobe/0.0.2' },
+          signal: AbortSignal.timeout(4000),
+        });
+      }
       fullStatus = resFull.status;
+      fullContentType = resFull.headers.get('content-type') ?? '';
     } catch {
       fullStatus = 0;
     }
   }
 
-  // Check 1: llms.txt Availability (7 pts)
-  if (status === 200 && content && content.trim().length > 0) {
+  const hasValidType = isValidLlmsContentType(contentType);
+  const isHtmlFallback = looksLikeHtmlDocument(content);
+  const isValidLlms =
+    (status === undefined || status === 200) &&
+    Boolean(content && content.trim().length > 0) &&
+    hasValidType &&
+    !isHtmlFallback;
+
+  // Check 1: llms.txt Availability & Content-Type (7 pts)
+  if (status === 200 && isValidLlms && content) {
+    const typeLabel = contentType ? `; Content-Type: ${contentType.split(';')[0].trim()}` : '';
     checks.push({
       id: 'llms-exists',
       name: 'llms.txt Manifest Found',
@@ -60,7 +93,19 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       status: 'pass',
       score: 7,
       maxScore: 7,
-      details: `Reachable at /llms.txt (${content.length} bytes)`,
+      details: `Reachable at /llms.txt (${content.length} bytes${typeLabel})`,
+    });
+  } else if (status === 200 && (!hasValidType || isHtmlFallback)) {
+    const reportedType = contentType ? contentType.split(';')[0].trim() : 'unknown';
+    checks.push({
+      id: 'llms-exists',
+      name: 'llms.txt Manifest Found',
+      description: 'Site publishes a standardized /llms.txt file for AI agent context',
+      status: 'fail',
+      score: 0,
+      maxScore: 7,
+      details: `Rejected /llms.txt: HTTP 200 returned Content-Type "${reportedType}"${isHtmlFallback ? ' with HTML body' : ''} (SPA fallback trap; expected text/plain or text/markdown)`,
+      recommendation: 'Serve /llms.txt with Content-Type: text/plain or text/markdown and exclude /llms.txt from SPA HTML fallback rewrites.',
     });
   } else {
     checks.push({
@@ -76,7 +121,7 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
   }
 
   // Check 2: Spec structure compliance (6 pts)
-  if (content && content.trim().length > 0) {
+  if (isValidLlms && content) {
     const hasH1 = /^#\s+.+/m.test(content);
     const hasBlockquote = /^>\s+.+/m.test(content);
     const hasLinks = /-\s+\[.+\]\(.+\)/m.test(content);
@@ -148,8 +193,8 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       status: 'fail',
       score: 0,
       maxScore: 6,
-      details: 'No /llms.txt file to parse.',
-      recommendation: 'Create a compliant /llms.txt file.',
+      details: 'No valid /llms.txt manifest to parse.',
+      recommendation: 'Create a compliant /llms.txt file served as text/plain or text/markdown.',
     });
     checks.push({
       id: 'llms-token-budget',
@@ -162,8 +207,10 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
     });
   }
 
-  // Check 4: Full Documentation Manifest (/llms-full.txt) (4 pts)
-  if (fullStatus === 200) {
+  // Check 4: Full Documentation Manifest (/llms-full.txt) & Content-Type (4 pts)
+  const hasValidFullType = isValidLlmsContentType(fullContentType);
+  if (fullStatus === 200 && hasValidFullType) {
+    const fullTypeLabel = fullContentType ? ` (${fullContentType.split(';')[0].trim()})` : '';
     checks.push({
       id: 'llms-full-exists',
       name: 'Full LLM Knowledge Manifest (/llms-full.txt)',
@@ -171,7 +218,19 @@ export async function auditLLMsTxt(input: LLMsTxtAuditInput): Promise<PillarResu
       status: 'pass',
       score: 4,
       maxScore: 4,
-      details: 'Found /llms-full.txt companion manifest',
+      details: `Found /llms-full.txt companion manifest${fullTypeLabel}`,
+    });
+  } else if (fullStatus === 200 && !hasValidFullType) {
+    const reportedFullType = fullContentType ? fullContentType.split(';')[0].trim() : 'unknown';
+    checks.push({
+      id: 'llms-full-exists',
+      name: 'Full LLM Knowledge Manifest (/llms-full.txt)',
+      description: 'Provides /llms-full.txt for comprehensive agent training and RAG ingestion',
+      status: 'fail',
+      score: 0,
+      maxScore: 4,
+      details: `Rejected /llms-full.txt: HTTP 200 returned Content-Type "${reportedFullType}" (SPA fallback trap; expected text/plain or text/markdown)`,
+      recommendation: 'Serve /llms-full.txt with Content-Type: text/plain or text/markdown, or return 404 instead of an SPA HTML fallback.',
     });
   } else {
     checks.push({

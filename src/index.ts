@@ -11,3 +11,7 @@ export { formatTerminalReport } from './reporters/terminal.js';
 export { formatJsonReport } from './reporters/json.js';
 export { formatPlainReport } from './reporters/plain.js';
 export { formatGitHubStepSummary } from './reporters/summary.js';
+export { formatSarifReport } from './reporters/sarif.js';
+export { formatJunitReport } from './reporters/junit.js';
+export { formatAgentReport } from './reporters/agent.js';
+export { formatGithubAnnotations } from './reporters/github.js';

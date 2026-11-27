@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateReport } from '../src/core/scorer.js';
+import { calculateMaturityLevel, calculateReport } from '../src/core/scorer.js';
 import { PillarResult } from '../src/types/index.js';
 
 describe('Scorer', () => {
@@ -75,11 +75,33 @@ describe('Scorer', () => {
       );
 
     expect(makeScoreReport(20).grade).toBe('A+');
+    expect(makeScoreReport(20).maturityLevel).toBe('L5');
     expect(makeScoreReport(20).durationMs).toBe(150);
     expect(makeScoreReport(17).grade).toBe('A');
+    expect(makeScoreReport(17).maturityLevel).toBe('L4');
     expect(makeScoreReport(15).grade).toBe('B');
+    expect(makeScoreReport(15).maturityLevel).toBe('L4');
     expect(makeScoreReport(13).grade).toBe('C');
+    expect(makeScoreReport(13).maturityLevel).toBe('L3');
     expect(makeScoreReport(9).grade).toBe('D');
+    expect(makeScoreReport(9).maturityLevel).toBe('L2');
     expect(makeScoreReport(5).grade).toBe('F');
+    expect(makeScoreReport(5).maturityLevel).toBe('L1');
+    expect(makeScoreReport(3).maturityLevel).toBe('L0');
+  });
+
+  it('maps boundary scores to L0-L5 maturity levels', () => {
+    expect(calculateMaturityLevel(0)).toBe('L0');
+    expect(calculateMaturityLevel(19)).toBe('L0');
+    expect(calculateMaturityLevel(20)).toBe('L1');
+    expect(calculateMaturityLevel(39)).toBe('L1');
+    expect(calculateMaturityLevel(40)).toBe('L2');
+    expect(calculateMaturityLevel(59)).toBe('L2');
+    expect(calculateMaturityLevel(60)).toBe('L3');
+    expect(calculateMaturityLevel(74)).toBe('L3');
+    expect(calculateMaturityLevel(75)).toBe('L4');
+    expect(calculateMaturityLevel(89)).toBe('L4');
+    expect(calculateMaturityLevel(90)).toBe('L5');
+    expect(calculateMaturityLevel(100)).toBe('L5');
   });
 });

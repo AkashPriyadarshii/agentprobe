@@ -1,6 +1,6 @@
 {
   "name": "@akashpriyadarshii/agentprobe",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "The open-source Lighthouse for AI Agents. Audit llms.txt, robots.txt bot rules, Schema.org JSON-LD, and DOM actionability in seconds. 0-100 score, CI gate, zero deps.",
   "author": "Akash Priyadarshi <272530059+AkashPriyadarshii@users.noreply.github.com>",
   "license": "MIT",

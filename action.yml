@@ -13,11 +13,30 @@ inputs:
     description: 'Minimum required score (0-100) to pass the CI gate'
     required: false
     default: '80'
+  extra-args:
+    description: 'Additional CLI arguments passed to agentprobe (e.g. --plain --no-color)'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
   steps:
     - name: Run AgentProbe
       shell: bash
+      env:
+        TARGET: ${{ inputs.target }}
+        MIN_SCORE: ${{ inputs.min-score }}
+        EXTRA_ARGS: ${{ inputs.extra-args }}
       run: |
-        npx -y @akashpriyadarshii/agentprobe "${{ inputs.target }}" --min-score "${{ inputs.min-score }}" --summary >> "$GITHUB_STEP_SUMMARY"
+        EXTRA=()
+        if [ -n "$EXTRA_ARGS" ]; then
+          read -r -a EXTRA <<< "$EXTRA_ARGS"
+        fi
+
+        set +e
+        npx -y @akashpriyadarshii/agentprobe "$TARGET" --min-score "$MIN_SCORE" "${EXTRA[@]}"
+        STATUS=$?
+        if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+          npx -y @akashpriyadarshii/agentprobe "$TARGET" --min-score "$MIN_SCORE" --summary >> "$GITHUB_STEP_SUMMARY" || true
+        fi
+        exit "$STATUS"
